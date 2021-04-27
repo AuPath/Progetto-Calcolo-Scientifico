@@ -1,6 +1,7 @@
 #!/bin/bash
 
-matrix_dir="$1" ## primo parametro passato
+matrix_dir="$1" ## primo parametro passato, il path alla cartella che
+                ## contiene le matrici.
 
 for matrix in "$matrix_dir"/*
 do
