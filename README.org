@@ -36,5 +36,10 @@ errore altri file/cartelle.
 
 Poi con questi dati possiamo fare i grafici con un qualche programma.
 
+* TODO
+Alcuni file .mat non seguono lo standard di avere la matrice A sotto
+Problem.A, vedere quante sono e gestirle con un if esplicito. Se il
+file é relativo ad una di queste matrici caricare A in maniera
+appropriata, altrimenti caricarla normalmente.
 
 
