@@ -42,4 +42,5 @@ Problem.A, vedere quante sono e gestirle con un if esplicito. Se il
 file é relativo ad una di queste matrici caricare A in maniera
 appropriata, altrimenti caricarla normalmente.
 
-
+matrici scazzate: bundle_ adj, ifiss.
+Hook da segmentation fault.
