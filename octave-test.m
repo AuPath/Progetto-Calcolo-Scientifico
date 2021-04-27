@@ -1,7 +1,9 @@
-### Si aspetta come parametri "File matrice"
+### Si aspetta come parametri "File matrice" e "nome file dove salvare
+### i risulati" in questo ordine.
 
 args = argv();
 matrix_file = args{1};
+result_file = args{2};
 
 load(matrix_file);
 
@@ -15,10 +17,10 @@ time = toc; ## tempo impiegato
 er = norm(xe - x) / norm(xe); ## errore relativo
 m_size = numel(A); ## dimensione matrice
 
-filename = "prova.txt";
-fid = fopen(filename, "a+");
+fid = fopen(result_file, "a+");
 fprintf(fid, "%d;%d;%d", m_size, er, time);
 fclose(fid);
 
+## Stampa messaggio di debug
 ## mex = sprintf("Matrice: %s, Dimensione: %d, Errore relativo: %d, Tempo: %d", matrix_file, m_size, er, time);
 ## disp(mex);
