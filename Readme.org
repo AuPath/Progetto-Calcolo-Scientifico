@@ -1,0 +1,40 @@
+* Funzionamento
+Per octave, una alternativa GNU a Matlab non é possibile misurare la
+memoria utilizzata.  Allora é possibile usare il comando qui sotto (se
+su Linux, forse va anche su Windows installando Cygwin o simili) per
+misurare la massima (peak) memoria utilizzata dal processo in
+KB. Volendo si puó vedere la memoria media utilizzata con il "%K".
+
+Il comando é generico, va bene per qualsiasi processo, lo potremmo
+utilizzare anche per altre librerie.  Matlab su windows ha la funzione
+memory che fa questa cosa in automatico, su linux invece non va,
+potremmo usare il comando qui sotto in quel caso.
+
+#+begin_src bash
+  /usr/bin/time -f "%M" nome-processo-octave
+#+end_src
+
+Lo [[file:analisi-octave.sh][Script bash per automatizzare]] in pratica salva in due file diversi
+i risultati di utilizzo della memoria e di statistiche misurabili da
+dentro octave (dimensione matrice, errore relativo, tempo impiegato).
+I due file alla fine vengono messi insieme nel file risultati.txt.
+
+Il file octave che si occupa di fare i calcoli é [[file:octave-test.m][questo.]]
+
+Alla fine risultati.txt é un file csv separato da ";", l'ordine di
+elementi é :
+
+1. Dimensione matrice (nrighe*ncolonne)
+2. Errore relativo
+3. Tempo impiegato
+4. Memoria massima utilizzata
+
+Per ogni invocazione dello script bash bisogna cancellare a mano i
+file creati alla invocazione precedente, non metto il codice per
+eliminarli automaticamente per evitare di sbagliare e cancellare per
+errore altri file/cartelle.
+
+Poi con questi dati possiamo fare i grafici con un qualche programma.
+
+
+
