@@ -3,7 +3,8 @@ Per octave, una alternativa GNU a Matlab non é possibile misurare la
 memoria utilizzata.  Allora é possibile usare il comando qui sotto (se
 su Linux, forse va anche su Windows installando Cygwin o simili) per
 misurare la massima (peak) memoria utilizzata dal processo in
-KB. Volendo si puó vedere la memoria media utilizzata con il "%K".
+KB. Volendo si puó vedere la memoria media utilizzata con il
+aggiungendo a -f "%K".
 
 Il comando é generico, va bene per qualsiasi processo, lo potremmo
 utilizzare anche per altre librerie.  Matlab su windows ha la funzione
@@ -11,7 +12,7 @@ memory che fa questa cosa in automatico, su linux invece non va,
 potremmo usare il comando qui sotto in quel caso.
 
 #+begin_src bash
-  /usr/bin/time -f "%M" nome-processo-octave
+  /usr/bin/time -f "%M" nome-processo
 #+end_src
 
 Lo [[file:analisi-octave.sh][Script bash per automatizzare]] in pratica salva in due file diversi
@@ -34,6 +35,10 @@ file creati alla invocazione precedente, non metto il codice per
 eliminarli automaticamente per evitare di sbagliare e cancellare per
 errore altri file/cartelle.
 
+Passo per file intermedi perché in Bash é un casino ottenere il valore
+di ritorno di una funzione in una variabile, allora scrivo il
+risultato in un file e poi me lo gestisco.
+
 Poi con questi dati possiamo fare i grafici con un qualche programma.
 
 * TODO
@@ -42,5 +47,5 @@ Problem.A, vedere quante sono e gestirle con un if esplicito. Se il
 file é relativo ad una di queste matrici caricare A in maniera
 appropriata, altrimenti caricarla normalmente.
 
-matrici scazzate: bundle_ adj, ifiss.
-Hook da segmentation fault.
+matrici scazzate: bundle_ adj, ifiss.  La matrice Hook da segmentation
+fault (out of memory), probabilmente perché ho solo 8gb di ram.
