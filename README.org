@@ -28,7 +28,7 @@ elementi é :
 1. Dimensione matrice (nrighe*ncolonne)
 2. Errore relativo
 3. Tempo impiegato
-4. Memoria massima utilizzata
+4. Memoria massima utilizzata (in KB)
 
 Per ogni invocazione dello script bash bisogna cancellare a mano i
 file creati alla invocazione precedente, non metto il codice per
