@@ -11,7 +11,7 @@ A = Problem.A; ## Standard per tutte le matrici
 tic; ## inizio timer funzione
 xe = ones(rows(A), 1); ## soluzione esatta
 b = A * xe;
-x = A \ b;
+x = A \ b; ## Ottimizza in automatico, esattamente come Matlab
 
 time = toc; ## tempo impiegato
 er = norm(xe - x) / norm(xe); ## errore relativo
