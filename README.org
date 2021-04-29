@@ -47,5 +47,7 @@ Problem.A, vedere quante sono e gestirle con un if esplicito. Se il
 file é relativo ad una di queste matrici caricare A in maniera
 appropriata, altrimenti caricarla normalmente.
 
-matrici scazzate: bundle_ adj, ifiss.  La matrice Hook da segmentation
-fault (out of memory), probabilmente perché ho solo 8gb di ram.
+matrici scazzate: bundle_ adj, ifiss. [[https://stackoverflow.com/questions/67297942/how-to-convert-a-matrix-saved-as-a-struct-to-matrix/67301837#67301837][Soluzione.]]
+
+La matrice Hook da segmentation fault (out of memory), probabilmente
+perché ho solo 8gb di ram.
