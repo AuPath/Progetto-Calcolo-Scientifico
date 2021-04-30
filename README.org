@@ -52,7 +52,7 @@ risultato in un file e poi me lo gestisco.
 
 Poi con questi dati possiamo fare i grafici con un qualche programma.
 
-** TODO
+* TODO
 Le matrici bundle_ adj, ifiss non sono in un formato standard, lo
 script [[file:conversione-matrici.m][conversione-matrici.m]] serve a trasformarli in un formato
 standard utilizzabile dallo script [[file:octave-test.m][octave-test.m]].
