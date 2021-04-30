@@ -1,5 +1,6 @@
-### Si aspetta come parametri "File matrice" e "nome file dove salvare
-### i risulati" in questo ordine.
+### Si aspetta come parametri "File matrice" e
+### "nome file dove salvare i risulati"
+### in questo ordine.
 
 args = argv();
 matrix_file = args{1};
@@ -17,7 +18,7 @@ time = toc; ## tempo impiegato
 er = norm(xe - x) / norm(xe); ## errore relativo
 m_size = numel(A); ## dimensione matrice
 
-fid = fopen(result_file, "a+");
+fid = fopen(result_file, "a+"); ## scrittura nel file, a+ sta per append
 fprintf(fid, "%d;%d;%d", m_size, er, time);
 fclose(fid);
 
