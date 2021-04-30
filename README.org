@@ -15,6 +15,17 @@ potremmo usare il comando qui sotto in quel caso.
   /usr/bin/time -f "%M" nome-processo
 #+end_src
 
+Da notare che il comando
+
+#+begin_src bash
+  /usr/bin/time
+#+end_src
+
+non é lo stesso comando che fare:
+#+begin_src bash
+  time
+#+end_src
+
 Lo [[file:analisi-octave.sh][Script bash per automatizzare]] in pratica salva in due file diversi
 i risultati di utilizzo della memoria e di statistiche misurabili da
 dentro octave (dimensione matrice, errore relativo, tempo impiegato).
