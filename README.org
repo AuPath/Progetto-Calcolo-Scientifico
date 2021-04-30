@@ -53,12 +53,14 @@ risultato in un file e poi me lo gestisco.
 Poi con questi dati possiamo fare i grafici con un qualche programma.
 
 * TODO
-Alcuni file .mat non seguono lo standard di avere la matrice A sotto
-Problem.A, vedere quante sono e gestirle con un if esplicito. Se il
-file é relativo ad una di queste matrici caricare A in maniera
-appropriata, altrimenti caricarla normalmente.
+Le matrici bundle_ adj, ifiss non sono in un formato standard, lo
+script [[file:conversione-matrici.m][conversione-matrici.m]] serve a trasformarli in un formato
+standard utilizzabile dallo script [[file:octave-test.m][octave-test.m]].
 
-matrici scazzate: bundle_ adj, ifiss. [[https://stackoverflow.com/questions/67297942/how-to-convert-a-matrix-saved-as-a-struct-to-matrix/67301837#67301837][Soluzione.]]
+Questo é il ragionamento seguito per la conversione [[https://stackoverflow.com/questions/67297942/how-to-convert-a-matrix-saved-as-a-struct-to-matrix/67301837#67301837][link stackoverflow]].
+
+Una volta fatta la conversione di queste matrici vanno sostituite alle
+matrici originali.
 
 La matrice Hook da segmentation fault (out of memory), probabilmente
 perché ho solo 8gb di ram.
