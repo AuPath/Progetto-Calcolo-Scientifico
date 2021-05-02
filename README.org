@@ -52,7 +52,7 @@ risultato in un file e poi me lo gestisco.
 
 Poi con questi dati possiamo fare i grafici con un qualche programma.
 
-* TODO
+* Todo
 Le matrici bundle_ adj, ifiss non sono in un formato standard, lo
 script [[file:conversione-matrici.m][conversione-matrici.m]] serve a trasformarli in un formato
 standard utilizzabile dallo script [[file:octave-test.m][octave-test.m]].
@@ -64,3 +64,14 @@ matrici originali.
 
 La matrice Hook da segmentation fault (out of memory), probabilmente
 perché ho solo 8gb di ram.
+
+* Per windows
+Su windows é possibile installare [[https://www.cygwin.com/][Cygwin]] per usare comandi linux,
+durante il processo di installazione viene chiesto quali pacchetti
+installare. Nella sezione 'Math' va aggiunto octave, nella sezione
+'Utilities' va aggiunto il comando time.
+
+La versione di octave offerta da cygwin é la 5.2, quindi su linux ha
+senso utilizzare la stessa versione. (La versione piú recente é la 6).
+Dal [[https://www.gnu.org/software/octave/news/release/2021/02/20/octave-6.2.0-released.html][changelog]] della 6 di octave non sembra essere cambiato niente che
+noi utilizziamo.
