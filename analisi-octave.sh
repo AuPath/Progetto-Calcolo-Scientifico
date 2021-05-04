@@ -17,7 +17,7 @@ result_file="$4"
 for matrix in "$matrix_dir"/*
 do
     ## Misurazione memoria
-    /usr/bin/time -f "%M" octave octave-test.m "$matrix" "$oct_file" &>> "$mem_file"
+    /usr/bin/time -f "%M" octave -W octave-test.m "$matrix" "$oct_file" &>> "$mem_file"
     ## aggiungo newline nel file prodotto dallo script octave
     echo "" >> "$oct_file"
 done
