@@ -17,9 +17,10 @@ x = A \ b; ## Ottimizza in automatico, esattamente come Matlab
 time = toc; ## tempo impiegato
 er = norm(xe - x) / norm(xe); ## errore relativo
 m_size = numel(A); ## dimensione matrice
+nnz = nnz(A)
 
 fid = fopen(result_file, "a+"); ## scrittura nel file, a+ sta per append
-fprintf(fid, "%d;%d;%d", m_size, er, time);
+fprintf(fid, "%d;%d;%d;%d", m_size, nnz, er, time);
 fclose(fid);
 
 ## Stampa messaggio di debug
