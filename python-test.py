@@ -13,12 +13,12 @@ struct = loadmat(matrix_file)
 
 # Matrix
 A = struct['Problem']['A'][0, 0]
-start_time = time.time()
 # Exact solution
 xe = np.ones(A.shape[0])
 # Compute b
 b = A.dot(xe)
 # Solve the linear system
+start_time = time.time()
 x = spsolve(A, b)
 
 elapsed = time.time() - start_time
