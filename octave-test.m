@@ -9,9 +9,9 @@ result_file = args{2};
 load(matrix_file);
 
 A = Problem.A; ## Standard per tutte le matrici
-tic; ## inizio timer funzione
 xe = ones(rows(A), 1); ## soluzione esatta
 b = A * xe;
+tic; ## inizio timer funzione
 x = A \ b; ## Ottimizza in automatico, esattamente come Matlab
 
 time = toc; ## tempo impiegato
