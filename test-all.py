@@ -23,7 +23,7 @@ OCTAVE_SCRIPT_NAME = 'octave-test'
 MATLAB_SCRIPT_NAME = 'matlab_test'
 PYTHON_SCRIPT_NAME = 'python-test'
 
-COMMAND_PREFIX = '/usr/bin/time -v"'
+COMMAND_PREFIX = '/usr/bin/time -v'
 #COMMAND_PREFIX = 'gtime -v'
 
 SCRIPT_COMMAND = {
