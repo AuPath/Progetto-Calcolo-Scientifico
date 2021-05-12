@@ -27,4 +27,4 @@ m_size = A.shape[0]
 nnz = A.nnz
 
 with open(result_file, 'a+') as f:
-    f.write(f'{m_size};{nnz};{er};{elapsed}\n')
+    f.write(f'{m_size};{nnz};{er};{elapsed}')
