@@ -1,0 +1,27 @@
+function [] = matlab_test(matrix_file, result_file)
+
+% Si aspetta come parametri "File matrice" e
+% "nome file dove salvare i risulati"
+% in questo ordine.
+
+load(matrix_file);
+A = Problem.A;
+
+% preparo il sistema
+xe = ones(length(A(:,1)), 1); % soluzione esatta
+b = A * xe;
+
+tic; % inizio timer funzione
+x = A \ b; % ottimizza in automatico
+time = toc; % tempo impiegato
+
+% statistiche
+er = norm(xe - x) / norm(xe); % errore relativo
+m_size = numel(A); % dimensione matrice
+nnzero = nnz(A);
+
+fid = fopen(result_file, "a+"); % scrittura nel file, a+ sta per append
+fprintf(fid, "%d;%d;%d;%d", m_size, nnzero, er, time);
+fclose(fid);
+
+end
