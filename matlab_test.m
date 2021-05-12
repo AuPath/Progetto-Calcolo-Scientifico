@@ -1,5 +1,8 @@
 function [] = matlab_test(matrix_file, result_file)
 
+% da cmd
+% matlab  -nodisplay -nosplash -nodesktop -r "matlab_test('Matrici-test/nome-matrice.mat', 'nome-matrice-result.txt');exit;"
+
 % Si aspetta come parametri "File matrice" e
 % "nome file dove salvare i risulati"
 % in questo ordine.
