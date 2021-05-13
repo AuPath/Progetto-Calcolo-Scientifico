@@ -37,7 +37,7 @@ SCRIPT_COMMAND = {
 }
 
 # List of matrices
-matrices_name = [f for f in os.listdir(input_dir) if isfile(join(input_dir, f))]
+matrices_name = [f for f in os.listdir(input_dir) if isfile(join(input_dir, f)) and f[0] != '.']
 
 for idx_matrix, matrix_name in enumerate(matrices_name, 1):
     for idx_type, (script_type, command) in enumerate(SCRIPT_COMMAND.items(), 1):
