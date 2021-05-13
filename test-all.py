@@ -18,7 +18,7 @@ n_runs = int(args.runs)
 os_name = args.os
 
 # Script execution
-SCRIPT_DIRECTORY = './'
+SCRIPT_DIRECTORY = ''
 OCTAVE_SCRIPT_NAME = 'octave-test'
 MATLAB_SCRIPT_NAME = 'matlab_test'
 PYTHON_SCRIPT_NAME = 'python-test'
@@ -31,7 +31,7 @@ SCRIPT_COMMAND = {
               '{} {}',
     'python': f'{COMMAND_PREFIX} python {join(SCRIPT_DIRECTORY, PYTHON_SCRIPT_NAME)}.py ' +
               '{} {}',
-    'matlab': f'{COMMAND_PREFIX} matlab -nodisplay -nosplash -nodesktop -r ' +
+    'matlab': f'{COMMAND_PREFIX} matlab -nosplash -nodesktop -wait -r ' +
               f'"{join(SCRIPT_DIRECTORY, MATLAB_SCRIPT_NAME)}' +
               "('{}', '{}')" + ';exit;"'
 }
