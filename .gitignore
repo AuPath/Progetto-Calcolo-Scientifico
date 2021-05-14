@@ -1,3 +1,5 @@
 Matrici/
 octave-workspace
 /Matrici-convertite/
+.idea/
+data/*.mat
