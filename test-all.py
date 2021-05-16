@@ -56,7 +56,15 @@ for idx_matrix, matrix_name in enumerate(matrices_name, 1):
             output = output.decode().split('\n')
             memory_peak = output[9].split(':')[-1].strip()
             memory_avg = output[10].split(':')[-1].strip()
-            # Append memory info
-            with open(join(output_dir, filename), "a") as file:
-                file.write(f";{memory_peak};{memory_avg}")
-
+            try:
+                # Sanity check
+                with open(join(output_dir, filename), "r") as file:
+                    assert len(file.readline().split(';')) == 4
+                # Append memory info
+                with open(join(output_dir, filename), "a") as file:
+                    file.write(f";{memory_peak};{memory_avg}")
+            except AssertionError:
+                print(f"\n>>> ------- {filename} FAILED! -------\n")
+                # Tracks failed tests
+                with open(join(output_dir, filename), "a") as file:
+                    file.write(f"{filename}\n")
