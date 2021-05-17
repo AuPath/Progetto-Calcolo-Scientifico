@@ -15,5 +15,10 @@
 ## Python: scipy
 - Le matrici sono in formato `.mat` ma con la libreria scipy è facile leggere le matrici, quindi esiste una compatibilità con questi tipi di file.
 
+## Picco di matlab
+`src/matlab_solver`
+
+Picco guardando il massimo
+
 ## Todo
 Tutte le matrici tranne: bundle_adj; Hook; ifiss
