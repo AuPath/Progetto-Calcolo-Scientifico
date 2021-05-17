@@ -6,10 +6,11 @@ function [] = matlab_test(matrix_file, result_file)
 % Si aspetta come parametri "File matrice" e
 % "nome file dove salvare i risulati"
 % in questo ordine.
-profile('-memory','on');
 
 load(matrix_file);
 A = Problem.A;
+
+profile('-memory','on'); % inizio l'analisi della memoria dopo aver caricato la matrice A
 
 % preparo il sistema
 xe = ones(length(A(:,1)), 1); % soluzione esatta
@@ -24,7 +25,7 @@ er = norm(xe - x) / norm(xe); % errore relativo
 m_size = numel(A); % dimensione matrice
 nnzero = nnz(A);
 
-peak_mem = profile('info').FunctionTable.PeakMem;
+peak_mem = profile('info').FunctionTable.PeakMem; % picco di memoria toccato durante il processo
 
 fid = fopen(result_file, "a+"); % scrittura nel file, a+ sta per append
 fprintf(fid, "%d;%d;%d;%d;%d", m_size, nnzero, er, time, peak_mem);
