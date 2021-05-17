@@ -6,6 +6,7 @@ function [] = matlab_test(matrix_file, result_file)
 % Si aspetta come parametri "File matrice" e
 % "nome file dove salvare i risulati"
 % in questo ordine.
+profile('-memory','on');
 
 load(matrix_file);
 A = Problem.A;
@@ -23,8 +24,10 @@ er = norm(xe - x) / norm(xe); % errore relativo
 m_size = numel(A); % dimensione matrice
 nnzero = nnz(A);
 
+peak_mem = profile('info').FunctionTable.PeakMem;
+
 fid = fopen(result_file, "a+"); % scrittura nel file, a+ sta per append
-fprintf(fid, "%d;%d;%d;%d", m_size, nnzero, er, time);
+fprintf(fid, "%d;%d;%d;%d;%d", m_size, nnzero, er, time, peak_mem);
 fclose(fid);
 
 end
