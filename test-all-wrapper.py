@@ -67,11 +67,11 @@ class ScriptThread(Thread):
     def run(self):
         if os.name == 'nt':
             # Windows
-            self.process = subprocess.Popen(self.command, shell=True, preexec_fn=os.setsid,
+            self.process = subprocess.Popen(self.command, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
                                             stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         else:
             # Linux / MacOS
-            self.process = subprocess.Popen(self.command, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
+            self.process = subprocess.Popen(self.command, shell=True, preexec_fn=os.setsid,
                                             stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
         try:
