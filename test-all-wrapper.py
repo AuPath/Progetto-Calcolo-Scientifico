@@ -3,7 +3,6 @@ import os
 from os.path import isfile, join
 import subprocess
 import psutil
-import signal
 import time
 import numpy as np
 from threading import Thread
@@ -68,11 +67,11 @@ class ScriptThread(Thread):
     def run(self):
         if os.name == 'nt':
             # Windows
-            self.process = subprocess.Popen(self.command, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
+            self.process = subprocess.Popen(self.command, shell=True,
                                             stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         else:
             # Linux / MacOS
-            self.process = subprocess.Popen(self.command, shell=True, preexec_fn=os.setsid,
+            self.process = subprocess.Popen(self.command, shell=True,
                                             stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
         try:
@@ -88,7 +87,9 @@ class ScriptThread(Thread):
             subprocess.call(['taskkill', '/F', '/T', '/PID', str(self.process.pid)],
                             stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         else:
-            os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)  # Send the signal to all the process groups
+            # Windows
+            subprocess.call(['kill', '-9', str(self.process.pid)],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         self.process.kill()
         self.process.terminate()
 
@@ -143,7 +144,8 @@ def test_all(matrices_name):
                       f'\t\tRUN ITER: {i_run} / {n_runs}')
                 target_command = command.format(join(input_dir, matrix_name), join(output_dir, filename))
 
-                sampling = False if script_type == 'matlab' else True
+                #sampling = False if script_type == 'matlab' else True
+                sampling = True
 
                 samples, finished = wrapper(target_command, sampling=sampling)
 
