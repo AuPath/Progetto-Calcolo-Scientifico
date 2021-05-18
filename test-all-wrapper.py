@@ -65,8 +65,15 @@ class ScriptThread(Thread):
         self.process = None
 
     def run(self):
-        self.process = subprocess.Popen(self.command, shell=True, preexec_fn=os.setsid,
-                                        stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        if os.name == 'nt':
+            # Windows
+            self.process = subprocess.Popen(self.command, shell=True, preexec_fn=os.setsid,
+                                            stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        else:
+            # Linux / MacOS
+            self.process = subprocess.Popen(self.command, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
+                                            stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
         try:
             self.process.wait(timeout=MINUTES_TIME_LIMIT * 60)
             self.kill_subprocess()
