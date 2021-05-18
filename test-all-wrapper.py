@@ -3,7 +3,6 @@ import os
 from os.path import isfile, join
 import subprocess
 import psutil
-import signal
 import time
 import numpy as np
 from threading import Thread
