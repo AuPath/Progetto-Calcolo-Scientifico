@@ -18,7 +18,7 @@ PYTHON_SCRIPT_NAME = 'python_solver'
 SAMPLING_RATE = 0.1
 
 # Execution time limit (in minutes)
-MINUTES_TIME_LIMIT = 0.1
+MINUTES_TIME_LIMIT = 30
 
 # Check the number of columns
 COLUMNS_NUMBER_CHECK = 6
