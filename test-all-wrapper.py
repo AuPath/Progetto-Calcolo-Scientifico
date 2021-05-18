@@ -76,9 +76,9 @@ class ScriptThread(Thread):
 
         try:
             self.process.wait(timeout=MINUTES_TIME_LIMIT * 60)
-            self.kill_subprocess()
         except subprocess.TimeoutExpired:
             self.finished = False
+        finally:
             self.kill_subprocess()
 
     def kill_subprocess(self):
