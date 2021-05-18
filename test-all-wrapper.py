@@ -62,14 +62,21 @@ class ScriptThread(Thread):
         Thread.__init__(self)
         self.command = command
         self.finished = True
+        self.process = None
 
     def run(self):
-        process = subprocess.Popen(self.command, shell=True,
-                                   stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        self.process = subprocess.Popen(self.command, shell=True, preexec_fn=os.setsid,
+                                        stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         try:
-            process.wait(timeout=MINUTES_TIME_LIMIT)
+            self.process.wait(timeout=MINUTES_TIME_LIMIT * 60)
+            self.kill_subprocess()
         except subprocess.TimeoutExpired:
             self.finished = False
+            self.kill_subprocess()
+
+    def kill_subprocess(self):
+        self.process.kill()
+        self.process.terminate()
 
     def hasFinished(self):
         return self.finished
@@ -79,6 +86,7 @@ def wrapper(command, sampling=True):
     samples = []
 
     thread_wrapper = ScriptThread(command)
+    thread_wrapper.setDaemon(True)
     thread_wrapper.start()
 
     while thread_wrapper.is_alive():
@@ -86,17 +94,20 @@ def wrapper(command, sampling=True):
         if sampling:
             samples.append(psutil.virtual_memory()[3])
 
-    if thread_wrapper.hasFinished():
+    thread_wrapper.join()
+    has_finished = thread_wrapper.hasFinished()
+
+    if has_finished:
         return samples, True
     else:
         return samples, False
 
 
-def log_error(filename):
+def log_error(filename, exception_type):
     print(f"\t\t\t>>> {filename} FAILED!")
     # Tracks failed tests
     with open(join(output_dir, '.errors.log'), "a") as file:
-        file.write(f"{filename}\n")
+        file.write(f"{filename};{exception_type}\n")
 
 
 def sanity_check(outpt_dir, filename, columns_number):
@@ -140,17 +151,18 @@ def test_all(matrices_name):
                         # Sanity check
                         sanity_check(output_dir, filename, COLUMNS_NUMBER_CHECK)
                     except (AssertionError, FileNotFoundError):
-                        log_error(filename)
+                        log_error(filename, 'format_exception')
                 else:
                     print(f'\t\t\t>>> {filename} HAS NOT FINISHED THE EXECUTION')
+                    log_error(filename, 'time_exception')
                     try:
                         # Garbage info
-                        with open(join(output_dir, filename), "a") as file:
+                        with open(join(output_dir, filename), "w+") as file:
                             file.write(f"{-1};" * 5 + f'{-1}')
                         # Sanity check
                         sanity_check(output_dir, filename, COLUMNS_NUMBER_CHECK)
                     except (AssertionError, FileNotFoundError):
-                        log_error(filename)
+                        log_error(filename, 'format_exception')
                     # Skip the remaining iterations
                     break
 
