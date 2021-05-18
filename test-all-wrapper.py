@@ -144,7 +144,8 @@ def test_all(matrices_name):
                       f'\t\tRUN ITER: {i_run} / {n_runs}')
                 target_command = command.format(join(input_dir, matrix_name), join(output_dir, filename))
 
-                sampling = False if script_type == 'matlab' else True
+                #sampling = False if script_type == 'matlab' else True
+                sampling = True
 
                 samples, finished = wrapper(target_command, sampling=sampling)
 
