@@ -3,6 +3,7 @@ import os
 from os.path import isfile, join
 import subprocess
 import psutil
+import signal
 import time
 import numpy as np
 from threading import Thread
@@ -17,7 +18,7 @@ PYTHON_SCRIPT_NAME = 'python_solver'
 SAMPLING_RATE = 0.1
 
 # Execution time limit (in minutes)
-MINUTES_TIME_LIMIT = 30
+MINUTES_TIME_LIMIT = 0.1
 
 # Check the number of columns
 COLUMNS_NUMBER_CHECK = 6
@@ -30,11 +31,11 @@ else:
     MATLAB_PATH = 'matlab'
 
 SCRIPT_COMMAND = {
+    'python': f'python {join(SCRIPT_DIRECTORY, PYTHON_SCRIPT_NAME)}.py ' + '{} {}',
     'matlab': f'{MATLAB_PATH} -batch ' +
               '"addpath(\''+SCRIPT_DIRECTORY+f'\');{MATLAB_SCRIPT_NAME}'
               + "('{}', '{}')" + ';exit;"',
     'octave': f'octave -W {join(SCRIPT_DIRECTORY, OCTAVE_SCRIPT_NAME)}.m ' + '{} {}',
-    'python': f'python {join(SCRIPT_DIRECTORY, PYTHON_SCRIPT_NAME)}.py ' + '{} {}',
 }
 
 
@@ -82,6 +83,12 @@ class ScriptThread(Thread):
             self.kill_subprocess()
 
     def kill_subprocess(self):
+        if os.name == 'nt':
+            # Windows
+            subprocess.call(['taskkill', '/F', '/T', '/PID', str(self.process.pid)],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        else:
+            os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)  # Send the signal to all the process groups
         self.process.kill()
         self.process.terminate()
 
