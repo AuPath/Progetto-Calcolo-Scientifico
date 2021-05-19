@@ -1,0 +1,320 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+\documentclass{beamer}
+
+\mode<presentation> {
+
+% The Beamer class comes with a number of default slide themes
+% which change the colors and layouts of slides. Below this is a list
+% of all the themes, uncomment each in turn to see what they look like.
+
+%\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{orchid}
+\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+
+%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{Progetto di Metodi del Calcolo Scientifico} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Tonelli Lidia Lucrezia (m. 813114)\\
+Grassi Marco (m. 830694)\\
+Giudice Gianluca (m. 829664)
+} % Your name
+\institute[University of Milano Bicocca] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+University of Milano Bicocca \\ % Your institution for the title page
+\medskip
+}
+\date{Giugno 2021} % Date, can be changed to a custom date
+
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview} % Table of contents slide, comment this block out to remove it
+\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+%------------------------------------------------
+\section{Metodi diretti per matrici sparse}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Cosa ci sar\'a nella presentazione}
+\begin{itemize}
+\item Matlab
+\begin{itemize}
+\item Windows
+\item Linux
+\end{itemize}
+\item Octave
+\begin{itemize}
+\item Windows
+\item Linux
+\end{itemize}
+\item Python (Numpy/Scipy)
+\begin{itemize}
+\item Windows
+\item Linux
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\frametitle{Librerie usate - Matlab}
+\begin{frame}
+Matlab \'e ben documentato.\\
+Come salva le matrici sparse? Come Python, ogni elemento diverso da 0 è salvato con colonna e riga\\
+Come risolve il sistema lineare? Fare riassunto con la parte delle matrici sparse https://it.mathworks.com/help/matlab/ref/mldivide.html\\
+Come tratta le matrici definite positive e quelle generiche? Cholesky per vedere se è definita positiva, se sì usa un metodo, se no un altro -> approfondire al link sopra
+\end{frame}
+
+\begin{frame}
+\frametitle{Librerie usate - Octave}
+Octave \'e mal documentato. \\
+Come salva le matrici sparse? Usa il compressed column format -> si salva ogni elemento diverso da zero con il numero di riga, e per ogni colonna salva il numero nnz per quella colonna -> anzi che una tripletta per ogni elemento diverso da zero, si salva una coppia e in più un numero per ogni colonna\\
+Come risolve il sistema lineare? Uguale a Matlab a meno che il sistema non sia singolare, over o under-determined (ma non è il nostro caso penso)\\
+Come tratta le matrici definite positive e quelle generiche? Vedi comportamento di Matlab\\
+
+Octave usa meno RAM di matlab → documentarsi
+\end{frame}
+
+\begin{frame}
+\frametitle{Librerie usate - Python (Numpy/Scipy)}
+Scipy \'e documentato peggio di Matlab ma meglio di Octave \\
+Come salva le matrici sparse? Numpy/Scipy si salva le matrici sparse solo con gli indici e il valore degli elementi diversi da zero\\
+Come risolve il sistema lineare?
+For solving the matrix expression AX = B, this solver assumes the resulting matrix X is sparse, as is often the case for very sparse inputs. If the resulting X is dense, the construction of this sparse result will be relatively expensive. In that case, consider converting A to a dense matrix and using scipy.linalg.solve or its variants.\\
+Usa SEMPRE la fattorizzazione LU\\
+Come tratta le matrici definite positive e quelle generiche? Non importa perchè usa sempre LU, che va bene per tutte → solve invece usa Cholesky?? C’\'e un modo per usare Cholesky in Scipy??
+\end{frame}
+
+%------------------------------------------------
+
+\frametitle{Come sono le matrici?}
+\begin{frame}
+Fare tabella\\
+$ifiss_mat$ non simmetrica, non definita positiva\\
+$TSC_OPF_1047$ simmetrica, non definita positiva\\
+$ns3Da$ non simmetrica, non definita positiva\\
+$GT01R$ non simmetrica, non definita positiva\\
+Le altre simmetriche e definite positive, candidate per Cholesky\\
+I determinanti? Troppo tempo per calcolarli
+\end{frame}
+
+\frametitle{Grafici}
+\begin{frame}
+Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocità, precisione, occupazione di memoria
+\end{frame}
+
+\frametitle{Grafici riassuntivi di confronto}
+\begin{frame}
+
+\end{frame}
+
+\frametitle{Listato}
+\begin{frame}
+
+\end{frame}
+
+\section{JPEG}
+
+
+%-----------------------------------------------
+% ESEMPI
+
+\begin{frame}
+\frametitle{Blocks of Highlighted Text}
+\begin{block}{Block 1}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
+\end{block}
+
+\begin{block}{Block 2}
+Pellentesque sed tellus purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum quis magna at risus dictum tempor eu vitae velit.
+\end{block}
+
+\begin{block}{Block 3}
+Suspendisse tincidunt sagittis gravida. Curabitur condimentum, enim sed venenatis rutrum, ipsum neque consectetur orci, sed blandit justo nisi ac lacus.
+\end{block}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Multiple Columns}
+\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+\column{.45\textwidth} % Left column and width
+\textbf{Heading}
+\begin{enumerate}
+\item Statement
+\item Explanation
+\item Example
+\end{enumerate}
+
+\column{.5\textwidth} % Right column and width
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
+
+\end{columns}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Table}
+\begin{table}
+\begin{tabular}{l l l}
+\toprule
+\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
+\midrule
+Treatment 1 & 0.0003262 & 0.562 \\
+Treatment 2 & 0.0015681 & 0.910 \\
+Treatment 3 & 0.0009271 & 0.296 \\
+\bottomrule
+\end{tabular}
+\caption{Table caption}
+\end{table}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Theorem}
+\begin{theorem}[Mass--energy equivalence]
+$E = mc^2$
+\end{theorem}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
+\frametitle{Verbatim}
+\begin{example}[Theorem Slide Code]
+\begin{verbatim}
+\begin{frame}
+\frametitle{Theorem}
+\begin{theorem}[Mass--energy equivalence]
+$E = mc^2$
+\end{theorem}
+\end{frame}\end{verbatim}
+\end{example}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Figure}
+Uncomment the code on this slide to include your own image from the same directory as the template .TeX file.
+%\begin{figure}
+%\includegraphics[width=0.8\linewidth]{test}
+%\end{figure}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
+\frametitle{Citation}
+An example of the \verb|\cite| command to cite within the presentation:\\~
+
+This statement requires citation \cite{p1}.
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{References}
+\footnotesize{
+\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
+\bibitem[Smith, 2012]{p1} John Smith (2012)
+\newblock Title of the publication
+\newblock \emph{Journal Name} 12(3), 45 -- 678.
+\end{thebibliography}
+}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\Huge{\centerline{Grazie per l'attenzione}}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+
+\end{document} 
