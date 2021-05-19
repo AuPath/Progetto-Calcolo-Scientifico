@@ -23,7 +23,7 @@ x = spsolve(A, b)
 
 elapsed = time.time() - start_time
 er = norm(xe - x) / norm(xe)
-m_size = A.shape[0] * A.shape[0]
+m_size = A.shape[0] * A.shape[1]
 nnz = A.nnz
 
 with open(result_file, 'a+') as f:
