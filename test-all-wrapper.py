@@ -6,6 +6,7 @@ import psutil
 import time
 import numpy as np
 from threading import Thread
+from sys import platform
 
 # Script execution
 SCRIPT_DIRECTORY = 'src'
@@ -22,16 +23,10 @@ MINUTES_TIME_LIMIT = 30
 # Check the number of columns
 COLUMNS_NUMBER_CHECK = 6
 
-if os.name == 'posix':
-    # MacOS
-    MATLAB_PATH = "/Applications/Matlab\ R2020b.app/bin/matlab"
-else:
-    # Windows / Linux
-    MATLAB_PATH = 'matlab'
 
 SCRIPT_COMMAND = {
     'python': f'python {join(SCRIPT_DIRECTORY, PYTHON_SCRIPT_NAME)}.py ' + '{} {}',
-    'matlab': f'{MATLAB_PATH} -batch ' +
+    'matlab': f'matlab -batch ' +
               '"addpath(\''+SCRIPT_DIRECTORY+f'\');{MATLAB_SCRIPT_NAME}'
               + "('{}', '{}')" + ';exit;"',
     'octave': f'octave -W {join(SCRIPT_DIRECTORY, OCTAVE_SCRIPT_NAME)}.m ' + '{} {}',
