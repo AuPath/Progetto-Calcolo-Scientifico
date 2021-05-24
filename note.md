@@ -12,8 +12,15 @@
 
 ## Domande generali
 - Nel file `octave-test.m` la soluzione esatta viene settata come il vettore di tutti 1. Il file matlab che viene importato è una struct contenente tante variabili oltre che l'effettiva matrice, tra cui la soluzione esatta del sistema. Perché non viene usata quella variabile come soluzione esatta del sistema anziché il valore di tutti 1? 
-## Python: scipy
+## Python: scipy + numpy + sksparse
 - Le matrici sono in formato `.mat` ma con la libreria scipy è facile leggere le matrici, quindi esiste una compatibilità con questi tipi di file.
+- Workflow:
+  1. Prova cholesky
+        1. Se funziona finisce
+    2. Se fallise usa LU
+        1. Usa risultato LU
+- `spsolve(A, b, use_umfpack=False)` il parametro `use_umfpack=Flase` serve per usare la fattorizzazione LU per risolvere il sistema
+
 
 ## Picco di matlab
 `src/matlab_solver`
