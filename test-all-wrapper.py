@@ -13,6 +13,7 @@ SCRIPT_DIRECTORY = 'src'
 OCTAVE_SCRIPT_NAME = 'octave_solver'
 MATLAB_SCRIPT_NAME = 'matlab_solver'
 PYTHON_SCRIPT_NAME = 'python_solver'
+PYTHON_OPTIMIZED_SCRIPT_NAME = 'python_solver_optimized'
 
 # Sampling rate
 SAMPLING_RATE = 0.1
@@ -26,6 +27,7 @@ COLUMNS_NUMBER_CHECK = 6
 
 SCRIPT_COMMAND = {
     'python': f'python {join(SCRIPT_DIRECTORY, PYTHON_SCRIPT_NAME)}.py ' + '{} {}',
+    'python_optimized': f'python {join(SCRIPT_DIRECTORY, PYTHON_OPTIMIZED_SCRIPT_NAME)}.py ' + '{} {}',
     'matlab': f'matlab -batch ' +
               '"addpath(\''+SCRIPT_DIRECTORY+f'\');{MATLAB_SCRIPT_NAME}'
               + "('{}', '{}')" + ';exit;"',
