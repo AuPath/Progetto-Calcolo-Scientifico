@@ -20,7 +20,7 @@
     2. Se fallise usa LU
         1. Usa risultato LU
 - `spsolve(A, b, use_umfpack=False)` il parametro `use_umfpack=Flase` serve per usare la fattorizzazione LU per risolvere il sistema
-
+- Per la matrice Hookk, la libreria che usa cholesy fallisce generando l'eccezione `sksparse.cholmod.CholmodTooLargeError`. Interessante notare come questo succede solo su windows ma non su linux.
 
 ## Picco di matlab
 `src/matlab_solver`
