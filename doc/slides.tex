@@ -79,6 +79,22 @@
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 
+
+\AtBeginSection[]{
+	\frame{
+		\tableofcontents[currentsection]
+	}
+}
+
+\AtBeginSubsection[]{
+	\frame{
+		\tableofcontents[currentsection,currentsubsection]
+	}
+}
+
+
+
+
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -115,36 +131,72 @@ University of Milano Bicocca \\ % Your institution for the title page
 \section{Metodi diretti per matrici sparse}
 %------------------------------------------------
 
+\subsection{Apporccio al problema}
+
 \begin{frame}
-\frametitle{Cosa ci sar\'a nella presentazione}
-\begin{itemize}
-\item Matlab
-\begin{itemize}
-\item Windows
-\item Linux
-\end{itemize}
-\item Octave
-\begin{itemize}
-\item Windows
-\item Linux
-\end{itemize}
-\item Python (numpy + scipy + scikit-sparse)
-\begin{itemize}
-\item Windows
-\item Linux
-\end{itemize}
-\end{itemize}
+	
+	\frametitle{Sistema operativo e hardware }
+	Sistema operativo (Installazione da zero)
+	\begin{itemize}
+		\item Windows 10 Pro
+		\item Ubuntu 20.04 LTS
+	\end{itemize}
+
+	Hardware
+	\begin{itemize}
+		\item CPU: Intel Core i7-8550U 4 x 1.8 - 4 GHz
+		\item RAM: 32 GB, DDR4-2400
+	\end{itemize}
 \end{frame}
 
-%------------------------------------------------
 
-\frametitle{Librerie usate - Matlab}
+\begin{frame}
+	
+	\frametitle{Librerie utilizzate}
+	Sono state utilizzate 3 librerie più 1 per ottimizzare il calcolo in python su matrici molto grandi.
+	\begin{itemize}
+		\item Matlab  R2021a
+		\item GNU Octave 6.1.0
+		\item Python 3.8.7
+		\begin{itemize}
+			\item numpy 1.20.3
+			\item scipy 1.6.3
+			\item scikit-sparse 0.4.4
+		\end{itemize}
+	\end{itemize}
+	N.B.: Per entrambi i sistemi operativi è stata utilizzata la stessa versione di libreria in modo da avere risultati conmparabili.
+\end{frame}
+
+
+\begin{frame}
+	
+	\frametitle{Metriche di performance}
+	Abbiamo creato 4 script per l'esecuzione singola 
+	Matlab \'e ben documentato.\\
+	Come salva le matrici sparse? Come Python, ogni elemento diverso da 0 è salvato con colonna e riga\\
+	Come risolve il sistema lineare? Fare riassunto con la parte delle matrici sparse https://it.mathworks.com/help/matlab/ref/mldivide.html\\
+	Come tratta le matrici definite positive e quelle generiche? Cholesky per vedere se è definita positiva, se sì usa un metodo, se no un altro -> approfondire al link sopra
+\end{frame}
+
+\begin{frame}
+	
+	\frametitle{Tecniche di misurazione}
+	Abbiamo creato 4 script per l'esecuzione singola 
+	Matlab \'e ben documentato.\\
+	Come salva le matrici sparse? Come Python, ogni elemento diverso da 0 è salvato con colonna e riga\\
+	Come risolve il sistema lineare? Fare riassunto con la parte delle matrici sparse https://it.mathworks.com/help/matlab/ref/mldivide.html\\
+	Come tratta le matrici definite positive e quelle generiche? Cholesky per vedere se è definita positiva, se sì usa un metodo, se no un altro -> approfondire al link sopra
+\end{frame}
+
+\subsection{Analisi delle librerie}
+
 \begin{frame}
 Matlab \'e ben documentato.\\
 Come salva le matrici sparse? Come Python, ogni elemento diverso da 0 è salvato con colonna e riga\\
 Come risolve il sistema lineare? Fare riassunto con la parte delle matrici sparse https://it.mathworks.com/help/matlab/ref/mldivide.html\\
 Come tratta le matrici definite positive e quelle generiche? Cholesky per vedere se è definita positiva, se sì usa un metodo, se no un altro -> approfondire al link sopra
 \end{frame}
+
 
 \begin{frame}
 \frametitle{Librerie usate - Octave}
@@ -167,6 +219,7 @@ Come tratta le matrici definite positive e quelle generiche? Non importa perchè
 \end{frame}
 
 %------------------------------------------------
+\subsection{Campagna sperimentale}
 
 \frametitle{Come sono le matrici?}
 \begin{frame}
