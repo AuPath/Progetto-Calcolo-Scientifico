@@ -1,0 +1,3 @@
+- Documentaazione delle librerie
+- Tabella riassuntiva matrici
+- Progetto 2
