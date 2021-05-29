@@ -220,6 +220,8 @@ University of Milano Bicocca \\ % Your institution for the title page
 \subsection{Analisi delle librerie}
 
 \begin{frame}
+	
+	\frametitle{Matlab}
 Matlab \'e ben documentato.\\
 Come salva le matrici sparse? Come Python, ogni elemento diverso da 0 è salvato con colonna e riga\\
 Come risolve il sistema lineare? Fare riassunto con la parte delle matrici sparse https://it.mathworks.com/help/matlab/ref/mldivide.html\\
@@ -228,7 +230,7 @@ Come tratta le matrici definite positive e quelle generiche? Cholesky per vedere
 
 
 \begin{frame}
-\frametitle{Librerie usate - Octave}
+\frametitle{Octave}
 Octave \'e mal documentato. \\
 Come salva le matrici sparse? Usa il compressed column format -> si salva ogni elemento diverso da zero con il numero di riga, e per ogni colonna salva il numero nnz per quella colonna -> anzi che una tripletta per ogni elemento diverso da zero, si salva una coppia e in più un numero per ogni colonna\\
 Come risolve il sistema lineare? Uguale a Matlab a meno che il sistema non sia singolare, over o under-determined (ma non è il nostro caso penso)\\
@@ -238,7 +240,16 @@ Octave usa meno RAM di matlab → documentarsi
 \end{frame}
 
 \begin{frame}
-\frametitle{Librerie usate - Python (numpy + scipy + scikit-sparse)}
+\frametitle{Python (numpy + scipy + scikit-sparse)}
+Python è un linguaggio di programmazione generale purpose. Abbiamo utilizzato 3 librerie apposite per il calcolo scientifico, ognuna con un compito diverso.
+\begin{enumerate}
+	\item numpy: Libreria utilizzata per leggere e gestire le matrice in memoria
+	\item scipy: Libreria specifica per il calcolo scientifico. Utilizza metodi diretti per il calcolo della soluzione di un sistema.\\
+	Il metodo standars per la risoluzione diretta di sistemi lineari non è ottimizzata così come matlab o octave.\\
+	Supporta la fattorizzazione LU tuttavia non è abilitata di default.\\
+	Non supporta cholesky su matrici sparci
+	\item scikit-sparse: Cholsesky su matrici sparse. Implementazione in c.
+\end{enumerate}
 Scipy \'e documentato peggio di Matlab ma meglio di Octave \\
 Come salva le matrici sparse? Numpy/Scipy si salva le matrici sparse solo con gli indici e il valore degli elementi diversi da zero\\
 Come risolve il sistema lineare?
