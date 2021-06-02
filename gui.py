@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (QApplication, QFormLayout, QLabel, QLineEdit,
                              QWidget, QGridLayout, QVBoxLayout, QHBoxLayout,
                              QPushButton, QFileDialog)
 
+
 class Window(QWidget):
     def __init__(self):
         super().__init__()
@@ -24,14 +25,23 @@ class Window(QWidget):
         self.form_layout = QFormLayout()
         self.horizontal_layout = QHBoxLayout()
 
-        # Path grid
+        # Widgets
+        self.input_browse_button = QPushButton("Browse")
+        self.output_browse_button = QPushButton("Browse")
+        self.input_line_edit = QLineEdit()
+        self.output_line_edit = QLineEdit()
+
+        self.f_parameter_line_edit = QLineEdit()
+        self.d_parameter_line_edit = QLineEdit()
+
+        self.reset_button = QPushButton("Reset")
+        self.compute_button = QPushButton("Compute")
+
+        # Build layouts
         self.build_path_grid()
-        # Parameters
         self.build_parameters_form()
-        # Buttons box
         self.build_buttons_box()
 
-        # Set layouts
         self.layout.addLayout(self.grid_layout)
         self.layout.addLayout(self.form_layout)
         self.layout.addLayout(self.horizontal_layout)
@@ -39,13 +49,8 @@ class Window(QWidget):
 
     def build_path_grid(self):
         # Path
-        self.input_browse_button = QPushButton("Browse")
         self.input_browse_button.clicked.connect(self.get_image_file)
-        self.output_browse_button = QPushButton("Browse")
         self.output_browse_button.clicked.connect(self.get_output_folder)
-        self.input_line_edit = QLineEdit()
-        self.output_line_edit = QLineEdit()
-
         self.grid_layout.addWidget(QLabel("Image File: "), 0, 0, 1, 1)
         self.grid_layout.addWidget(self.input_line_edit, 0, 1, 1, 1)
         self.grid_layout.addWidget(self.input_browse_button, 0, 2, 1, 1)
@@ -54,16 +59,12 @@ class Window(QWidget):
         self.grid_layout.addWidget(self.output_browse_button, 1, 2, 1, 1)
 
     def build_parameters_form(self):
-        self.f_parameter_line_edit = QLineEdit()
         self.form_layout.addRow("F Parameter:", self.f_parameter_line_edit)
-        self.d_parameter_line_edit = QLineEdit()
         self.form_layout.addRow("d Parameter:", self.d_parameter_line_edit)
 
     def build_buttons_box(self):
-        self.reset_button = QPushButton("Reset")
         self.reset_button.clicked.connect(self.reset_fields)
         self.horizontal_layout.addWidget(self.reset_button)
-        self.compute_button = QPushButton("Compute")
         self.compute_button.clicked.connect(self.compute)
         self.horizontal_layout.addWidget(self.compute_button)
 
@@ -96,7 +97,6 @@ class Window(QWidget):
         print(f"Output folder: {self.output_path}")
         print(f"F parameter: {self.f}")
         print(f"d parameter: {self.d}")
-
 
     def update_variables(self):
         self.input_path = self.input_line_edit.text()
