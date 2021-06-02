@@ -63,7 +63,7 @@ class Window(QWidget):
         self.reset_button = QPushButton("Reset")
         self.reset_button.clicked.connect(self.reset_fields)
         self.horizontal_layout.addWidget(self.reset_button)
-        self.compute_button = QPushButton("Calcola")
+        self.compute_button = QPushButton("Compute")
         self.compute_button.clicked.connect(self.compute)
         self.horizontal_layout.addWidget(self.compute_button)
 
