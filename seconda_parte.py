@@ -35,7 +35,9 @@ def dct2_personal(a):
         c[:, j] = dct_personal(c[:, j])
 
     return c
- 
+
+### Per le posizioni che non rientrano nei blocchi fxf viene usato l'approccio
+### a "cornice" visto a lezione, cioé c'é un bordo nero.
 def pseudo_jpeg(img_path, f, d):
     img = Image.open(img_path)
     img_mat = np.array(img)
