@@ -50,6 +50,18 @@ def dct2_personal(a):
 
     return c
 
+def idct2_personal(a):
+    n, m = a.shape
+    v = np.zeros((n, m))  # result matrix
+    # dct by rows
+    for i in range(n):
+        v[i] = idct_personal(a[i])  # i-th row
+    # dct by columns
+    for j in range(m):
+        v[:, j] = idct_personal(v[:, j])
+
+    return v
+
 ### Per le posizioni che non rientrano nei blocchi fxf viene usato l'approccio
 ### a "cornice" visto a lezione, cioé c'é un bordo nero.
 def pseudo_jpeg(img_path, f, d):
