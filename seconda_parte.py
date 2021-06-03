@@ -67,4 +67,7 @@ def pseudo_jpeg(img_path, f, d):
 
     return c_mat
     
-
+def save_compressed_image(img_path, f, d):
+    img = Image.fromarray(pseudo_jpeg(img_path, f, d))
+    cmpr_img_path = img_path.replace(".bmp", "-compressed.bmp")
+    img.save(cmpr_img_path)
