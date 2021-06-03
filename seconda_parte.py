@@ -2,6 +2,11 @@ import numpy as np
 from PIL import Image
 import math
 
+## fissa un range di valori possibili per n
+def clamp(n, smallest, largest): return max(smallest, min(n, largest))
+
+def fix_number(n): return clamp(round(n), 0, 255)  
+
 def dct_personal(v):
     n = len(v)
     c = np.zeros(n)
@@ -35,12 +40,24 @@ def pseudo_jpeg(img_path, f, d):
     img_mat = np.array(img)
     c_mat = np.zeros_like(img_mat)
     rows, columns = img_mat.shape
-    blocks = []
-
+    
     for i in range(math.floor(rows / f)):
         for j in range(math.floor(columns / f)):
             ## a[0:8,0:3] 8 righe 3 colonne
-            c_mat[i*f : (i+1)*f, j*f : (j+1)*f] = dct2_personal(img_mat[i*f : (i+1)*f, j*f : (j+1)*f])
+            block = dct2_personal(img_mat[i*f : (i+1)*f, j*f : (j+1)*f])
+            
+            for k in range(block.shape[0]):
+                for l in range(block.shape[1]):
+                    if (k + l) >= d :
+                        block[k,l] = 0 ## per eliminare la frequenza intende mettere a 0 ?
+                        
+            ## block = idct2_personal(block);
+            
+            for k in range(block.shape[0]):
+                for l in range(block.shape[1]):
+                    fix_number(block[k,l])
+                    
+            c_mat[i*f : (i+1)*f, j*f : (j+1)*f] = block                    
 
     return c_mat
     
