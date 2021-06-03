@@ -8,6 +8,20 @@ def clamp(n, smallest, largest): return max(smallest, min(n, largest))
 ## forza n ad un valore intero tra 0 e 255
 def fix_number(n): return clamp(round(n), 0, 255)  
 
+## sto scazzando qualcosa con gli indici
+def idct_personal(c):
+    n = len(c)
+    v = np.zeros(n)
+    for j in range (n):
+        sum = 0
+        for k in range(n):
+            sum += c[k] * math.cos(k * math.pi * ((2 * j + 1) / (2 * n)))
+            v[j] = sum
+    return v
+
+## test per dct e idct
+## np.allclose(idct_personal(dct_personal([1,2,3])), [1,2,3])
+
 def dct_personal(v):
     n = len(v)
     c = np.zeros(n)
