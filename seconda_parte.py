@@ -21,26 +21,28 @@ def pseudo_jpeg(img_path, f, d):
     for i in range(math.floor(rows / f)):
         for j in range(math.floor(columns / f)):
 
-            idct
             ## a[0:8,0:3] 8 righe 3 colonne
+            
             block = img_mat[i*f : (i+1)*f, j*f : (j+1)*f]
             block = dct(dct(block, axis=1, norm="ortho"), axis=0, norm="ortho")
 
             ## eliminazione elementi sotto diagonale
-            for k in range(block.shape[0]):
-                for l in range(block.shape[1]):
+            
+            block_rows, block_columns = block.shape
+            for k in range(block_rows):
+                for l in range(block_columns):
                     if (k + l) >= d :
                         block[k,l] = 0 ## per eliminare la frequenza intende mettere a 0 ?
                         
-            block = idct(idct(block, axis=1, norm="ortho"), axis=0, norm="ortho")                        
-
+            block = idct(idct(block, axis=1, norm="ortho"), axis=0, norm="ortho")
+            
             ## fix dei numeri
             for k in range(block.shape[0]):
                 for l in range(block.shape[1]):
-                    fix_number(block[k,l])
-                    
-            c_mat[i*f : (i+1)*f, j*f : (j+1)*f] = block                    
+                    block[k,l] = fix_number(block[k,l])
 
+            c_mat[i*f : (i+1)*f, j*f : (j+1)*f] = block                    
+            
     return c_mat
     
 def save_compressed_image(img_path, f, d):
