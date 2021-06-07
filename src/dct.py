@@ -49,7 +49,7 @@ def pseudo_jpeg(img_path, f, d):
 
     return c_mat
 
-
+## Salva immagine compressa nella stessa cartella dell'immagine originale, l'immagine compressa avrà lo stesso nome dell'originale con appeso -compressed e i parametri f e d
 def save_compressed_image(img_path, f, d):
     img = Image.fromarray(pseudo_jpeg(img_path, int(f), int(d)))
     cmpr_img_path = img_path.replace(".bmp", "-compressed-{f}-{d}.bmp".format(f=f,d=d))
