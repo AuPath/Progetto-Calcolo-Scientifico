@@ -78,6 +78,7 @@
 
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage{amsmath}
 
 
 \AtBeginSection[]{
@@ -131,7 +132,7 @@ University of Milano Bicocca \\ % Your institution for the title page
 \section{Metodi diretti per matrici sparse}
 %------------------------------------------------
 
-\subsection{Apporccio al problema}
+\subsection{Approccio al problema}
 
 \begin{frame}
 	
@@ -153,7 +154,7 @@ University of Milano Bicocca \\ % Your institution for the title page
 \begin{frame}
 	
 	\frametitle{Librerie utilizzate}
-	Sono state utilizzate 3 librerie piÃ¹ 1 per ottimizzare il calcolo in python su matrici molto grandi.
+	Sono state utilizzate 3 librerie più 1 per ottimizzare il calcolo in python su matrici molto grandi.
 	\begin{itemize}
 		\item Matlab  R2021a
 		\item GNU Octave 6.1.0
@@ -164,7 +165,7 @@ University of Milano Bicocca \\ % Your institution for the title page
 			\item scikit-sparse 0.4.4
 		\end{itemize}
 	\end{itemize}
-	N.B.: Per entrambi i sistemi operativi Ã¨ stata utilizzata la stessa versione di libreria in modo da avere risultati conmparabili.
+	N.B.: Per entrambi i sistemi operativi è stata utilizzata la stessa versione di libreria in modo da avere risultati conmparabili.
 \end{frame}
 
 
@@ -223,30 +224,30 @@ University of Milano Bicocca \\ % Your institution for the title page
 	
 	\frametitle{Matlab}
 Matlab \'e ben documentato.\\
-Come salva le matrici sparse? Come Python, ogni elemento diverso da 0 Ã¨ salvato con colonna e riga\\
+Come salva le matrici sparse? Come Python, ogni elemento diverso da 0 è salvato con colonna e riga\\
 Come risolve il sistema lineare? Fare riassunto con la parte delle matrici sparse https://it.mathworks.com/help/matlab/ref/mldivide.html\\
-Come tratta le matrici definite positive e quelle generiche? Cholesky per vedere se Ã¨ definita positiva, se sÃ¬ usa un metodo, se no un altro -> approfondire al link sopra
+Come tratta le matrici definite positive e quelle generiche? Cholesky per vedere se è definita positiva, se sì usa un metodo, se no un altro -> approfondire al link sopra
 \end{frame}
 
 
 \begin{frame}
 \frametitle{Octave}
 Octave \'e mal documentato. \\
-Come salva le matrici sparse? Usa il compressed column format -> si salva ogni elemento diverso da zero con il numero di riga, e per ogni colonna salva il numero nnz per quella colonna -> anzi che una tripletta per ogni elemento diverso da zero, si salva una coppia e in piÃ¹ un numero per ogni colonna\\
-Come risolve il sistema lineare? Uguale a Matlab a meno che il sistema non sia singolare, over o under-determined (ma non Ã¨ il nostro caso penso)\\
+Come salva le matrici sparse? Usa il compressed column format -> si salva ogni elemento diverso da zero con il numero di riga, e per ogni colonna salva il numero nnz per quella colonna -> anzi che una tripletta per ogni elemento diverso da zero, si salva una coppia e in più un numero per ogni colonna\\
+Come risolve il sistema lineare? Uguale a Matlab a meno che il sistema non sia singolare, over o under-determined (ma non è il nostro caso penso)\\
 Come tratta le matrici definite positive e quelle generiche? Vedi comportamento di Matlab\\
 
-Octave usa meno RAM di matlab â†’ documentarsi
+Octave usa meno RAM di matlab ? documentarsi
 \end{frame}
 
 \begin{frame}
 \frametitle{Python (numpy + scipy + scikit-sparse)}
-Python Ã¨ un linguaggio di programmazione generale purpose. Abbiamo utilizzato 3 librerie apposite per il calcolo scientifico, ognuna con un compito diverso.
+Python è un linguaggio di programmazione generale purpose. Abbiamo utilizzato 3 librerie apposite per il calcolo scientifico, ognuna con un compito diverso.
 \begin{enumerate}
 	\item numpy: Libreria utilizzata per leggere e gestire le matrice in memoria
 	\item scipy: Libreria specifica per il calcolo scientifico. Utilizza metodi diretti per il calcolo della soluzione di un sistema.\\
-	Il metodo standars per la risoluzione diretta di sistemi lineari non Ã¨ ottimizzata cosÃ¬ come matlab o octave.\\
-	Supporta la fattorizzazione LU tuttavia non Ã¨ abilitata di default.\\
+	Il metodo standars per la risoluzione diretta di sistemi lineari non è ottimizzata così come matlab o octave.\\
+	Supporta la fattorizzazione LU tuttavia non è abilitata di default.\\
 	Non supporta cholesky su matrici sparci
 	\item scikit-sparse: Cholsesky su matrici sparse. Implementazione in c.
 \end{enumerate}
@@ -255,40 +256,90 @@ Come salva le matrici sparse? Numpy/Scipy si salva le matrici sparse solo con gl
 Come risolve il sistema lineare?
 For solving the matrix expression AX = B, this solver assumes the resulting matrix X is sparse, as is often the case for very sparse inputs. If the resulting X is dense, the construction of this sparse result will be relatively expensive. In that case, consider converting A to a dense matrix and using scipy.linalg.solve or its variants.\\
 Usa SEMPRE la fattorizzazione LU\\
-Come tratta le matrici definite positive e quelle generiche? Non importa perchÃ¨ usa sempre LU, che va bene per tutte â†’ solve invece usa Cholesky?? Câ€™\'e un modo per usare Cholesky in Scipy??
+Come tratta le matrici definite positive e quelle generiche? Non importa perchè usa sempre LU, che va bene per tutte ? solve invece usa Cholesky?? C’\'e un modo per usare Cholesky in Scipy??
 \end{frame}
 
 %------------------------------------------------
 \subsection{Campagna sperimentale}
 
-\frametitle{Come sono le matrici?}
 \begin{frame}
-Fare tabella\\
-$ifiss_mat$ non simmetrica, non definita positiva\\
-$TSC_OPF_1047$ simmetrica, non definita positiva\\
-$ns3Da$ non simmetrica, non definita positiva\\
-$GT01R$ non simmetrica, non definita positiva\\
-Le altre simmetriche e definite positive, candidate per Cholesky\\
-I determinanti? Troppo tempo per calcolarli
+\frametitle{Propriet\'a delle matrici}
+\begin{table}
+\begin{tabular}{c c c c}
+\toprule
+\textbf{Matrice} & \textbf{Simmetrica} & \textbf{Def. pos.} & \textbf{Cand. Cholesky}\\
+\midrule
+Hook$\_$1498 & Y & Y & Y\\
+ G3$\_$circuit & Y & Y & Y\\
+ nd24k & Y & Y & Y\\
+ boundle$\_$adj & Y & Y & Y\\
+ ifiss$\_$mat & N & N & N\\  
+ TSC$\_$OPF$\_$1047 & Y & N & N\\
+ ns3Da & N & N & N\\
+ GT01R & N & N & N \\
+\bottomrule
+\end{tabular}
+\end{table}
 \end{frame}
 
+\begin{frame}
 \frametitle{Grafici}
-\begin{frame}
-Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocitÃ , precisione, occupazione di memoria
+Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocità, precisione, occupazione di memoria
 \end{frame}
 
+\begin{frame}
 \frametitle{Grafici riassuntivi di confronto}
-\begin{frame}
-
 \end{frame}
 
-\frametitle{Listato}
 \begin{frame}
-
+\frametitle{Listato}
 \end{frame}
 
 \section{JPEG}
 
+\subsection{Custom DCT2}
+
+\begin{frame}
+\frametitle{Algoritmo usato}
+DCT2 fatta con numpy e FFT per confrontare presa da scipy.fft
+array crescenti di dimensione $2^i$
+\end{frame}
+
+\begin{frame}
+\frametitle{Notizie su scipy.fft}
+\end{frame}
+
+\begin{frame}
+\frametitle{Confronto tra Custom DCT2 e FFT}
+grafici - la dct \'e $O(N^3)$, la FFT \'e $O(N^2)$
+\end{frame}
+
+\begin{frame}
+\frametitle{listato}
+\end{frame}
+
+\subsection{Custom JPEG}
+
+\begin{frame}
+\frametitle{Algoritmo}
+\end{frame}
+
+\begin{frame}
+\frametitle{Algoritmo}
+\end{frame}
+
+\begin{frame}
+\frametitle{Esempi con le immagini proposte}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sperimentazione}
+Momento della presentazione in cui facciamo girare il nostro programma
+\end{frame}
+
+\begin{frame}
+\frametitle{listato}
+\end{frame}
 
 %-----------------------------------------------
 % ESEMPI
@@ -327,25 +378,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ul
 
 \end{columns}
 \end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{Table}
-\begin{table}
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\caption{Table caption}
-\end{table}
-\end{frame}
-
 %------------------------------------------------
 
 \begin{frame}
