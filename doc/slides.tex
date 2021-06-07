@@ -79,6 +79,7 @@
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage{amsmath}
+\usepackage{textcomp}
 
 
 \AtBeginSection[]{
@@ -119,11 +120,6 @@ University of Milano Bicocca \\ % Your institution for the title page
 \titlepage % Print the title page as the first slide
 \end{frame}
 
-\begin{frame}
-\frametitle{Overview} % Table of contents slide, comment this block out to remove it
-\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
-\end{frame}
-
 %----------------------------------------------------------------------------------------
 %	PRESENTATION SLIDES
 %----------------------------------------------------------------------------------------
@@ -137,7 +133,7 @@ University of Milano Bicocca \\ % Your institution for the title page
 \begin{frame}
 	
 	\frametitle{Sistema operativo e hardware }
-	Sistema operativo (Installazione da zero)
+	Sistema operativo (installazione da zero)
 	\begin{itemize}
 		\item Windows 10 Pro
 		\item Ubuntu 20.04 LTS
@@ -153,8 +149,8 @@ University of Milano Bicocca \\ % Your institution for the title page
 
 \begin{frame}
 	
-	\frametitle{Librerie utilizzate}
-	Sono state utilizzate 3 librerie più 1 per ottimizzare il calcolo in python su matrici molto grandi.
+	\frametitle{Ambienti di programmazione e librerie utilizzate}
+	Abbiamo utilizzato 3 ambienti di programmazione; per Python abbiamo usato 3 librerie, di cui una necessaria per ottimizzare il calcolo su matrici molto grandi.
 	\begin{itemize}
 		\item Matlab  R2021a
 		\item GNU Octave 6.1.0
@@ -165,7 +161,7 @@ University of Milano Bicocca \\ % Your institution for the title page
 			\item scikit-sparse 0.4.4
 		\end{itemize}
 	\end{itemize}
-	N.B.: Per entrambi i sistemi operativi è stata utilizzata la stessa versione di libreria in modo da avere risultati conmparabili.
+	N.B.: Per entrambi i sistemi operativi \'e stata utilizzata la stessa versione di libreria in modo da avere risultati conmparabili.
 \end{frame}
 
 
@@ -173,11 +169,12 @@ University of Milano Bicocca \\ % Your institution for the title page
 	\frametitle{Metriche di performance}
 	Per misurare le performance sono state utilizzate le seguenti metriche:
 	\begin{itemize}
-		\item Tempo di calcolo
-		\item Picco memoria RAM utilizzata
-		\item Errore della soluzione
+		\item Tempo di calcolo della soluzione
+		\item Picco memoria RAM utilizzata per risolvere il sistema
+		\item Errore della soluzione: \[err \_ rel = \frac{\|x - xe\|_2}{\|xe\|_2}\]
+		con $\| \cdot \|$ la norma euclidea dei vettori
 	\end{itemize}
-\end{frame}
+	\end{frame}
 
 \begin{frame}
 	
@@ -196,7 +193,7 @@ University of Milano Bicocca \\ % Your institution for the title page
 			\begin{enumerate}
 				\item Run di ogni script per ogni matrice su ogni sistema operativo.
 
-					\item Misurazione del tempo (si considera solo il tempo per il caclolo della soluzione)
+					\item Misurazione del tempo (si considera solo il tempo per il calcolo della soluzione)
 					\item Misurazione dell'errore 
 
 			\end{enumerate}
@@ -222,32 +219,27 @@ University of Milano Bicocca \\ % Your institution for the title page
 
 \begin{frame}
 	
-	\frametitle{Matlab}
-Matlab \'e ben documentato.\\
-Come salva le matrici sparse? Come Python, ogni elemento diverso da 0 è salvato con colonna e riga\\
-Come risolve il sistema lineare? Fare riassunto con la parte delle matrici sparse https://it.mathworks.com/help/matlab/ref/mldivide.html\\
-Come tratta le matrici definite positive e quelle generiche? Cholesky per vedere se è definita positiva, se sì usa un metodo, se no un altro -> approfondire al link sopra
+\frametitle{Matlab}
+Matlab \'e ben documentato alla pagina \url{it.mathworks.com/help/matlab}, con motore di ricerca ed esempi.\\
+\textbf{Memorizzazione di matrici sparse}: data una matrice sparsa, Matlab salva solo gli elementi diversi da 0 in una lista, insieme al numero di colonna e riga. \\
+\textbf{Risoluzione di $Ax = b$}: Matlab ha a disposizione tanti risolutori di sistemi, il cui uso dipende dalla forma della matrice $A$; pertanto, quando viene eseguito il comando $A \setminus b$ si fanno una serie di controlli su $A$, i casi presi in considerazione sono: matrice quadrata, triangolare, triangolare permutata, Hermitiana, Hessenberg superiore, la matrice ha la diagonale tutta positiva o tutta negativa, la matrice \'e simmetrica e definita positiva. In tutti questi casi viene usato un solutore diverso, ad esempio se la matrice \'e simmetrica e definita positiva si applica l'algoritmo di Cholesky.
 \end{frame}
-
 
 \begin{frame}
 \frametitle{Octave}
-Octave \'e mal documentato. \\
-Come salva le matrici sparse? Usa il compressed column format -> si salva ogni elemento diverso da zero con il numero di riga, e per ogni colonna salva il numero nnz per quella colonna -> anzi che una tripletta per ogni elemento diverso da zero, si salva una coppia e in più un numero per ogni colonna\\
-Come risolve il sistema lineare? Uguale a Matlab a meno che il sistema non sia singolare, over o under-determined (ma non è il nostro caso penso)\\
-Come tratta le matrici definite positive e quelle generiche? Vedi comportamento di Matlab\\
-
-Octave usa meno RAM di matlab ? documentarsi
+Octave \'e documentato in modo scomodo rispetto a Matlab alla pagina \url{https://octave.org/doc/v6.2.0}, che \'e un semplice manuale. \\
+\textbf{Memorizzazione di matrici sparse}: usa il \textit{compressed column format}, ovvero salva solo gli elementi diversi da 0 con il proprio numero di riga, e per ogni colonna salva il numero di elementi diversi da 0 per quella colonna; pertanto al posto di una tripletta per ogni elemento diverso da 0, si salva una coppia e in pi\'u un numero per ogni colonna, ottimizzando la memorizzazione. \\
+\textbf{Risoluzione di $Ax = b$}: si comporta allo stesso modo di Matlab, ovvero considera la forma della matrice $A$ per scegliere il risolutore adatto. Anche Octave, come Matlab, prova ad applicare Cholesky e se non riesce significa che la matrice non \'e definita positiva e/o simmetrica.
 \end{frame}
 
 \begin{frame}
 \frametitle{Python (numpy + scipy + scikit-sparse)}
-Python è un linguaggio di programmazione generale purpose. Abbiamo utilizzato 3 librerie apposite per il calcolo scientifico, ognuna con un compito diverso.
+Python Ã¨ un linguaggio di programmazione general purpose. Abbiamo utilizzato 3 librerie apposite per il calcolo scientifico, ognuna con un compito diverso.
 \begin{enumerate}
-	\item numpy: Libreria utilizzata per leggere e gestire le matrice in memoria
-	\item scipy: Libreria specifica per il calcolo scientifico. Utilizza metodi diretti per il calcolo della soluzione di un sistema.\\
-	Il metodo standars per la risoluzione diretta di sistemi lineari non è ottimizzata così come matlab o octave.\\
-	Supporta la fattorizzazione LU tuttavia non è abilitata di default.\\
+	\item \textit{numpy}: Libreria utilizzata per leggere e gestire le matrice in memoria
+	\item \textit{scipy}: Libreria specifica per il calcolo scientifico. Utilizza metodi diretti per il calcolo della soluzione di un sistema.\\
+	Il metodo standars per la risoluzione diretta di sistemi lineari non Ã¨ ottimizzata cosÃ¬ come matlab o octave.\\
+	Supporta la fattorizzazione LU tuttavia non Ã¨ abilitata di default.\\
 	Non supporta cholesky su matrici sparci
 	\item scikit-sparse: Cholsesky su matrici sparse. Implementazione in c.
 \end{enumerate}
@@ -256,7 +248,7 @@ Come salva le matrici sparse? Numpy/Scipy si salva le matrici sparse solo con gl
 Come risolve il sistema lineare?
 For solving the matrix expression AX = B, this solver assumes the resulting matrix X is sparse, as is often the case for very sparse inputs. If the resulting X is dense, the construction of this sparse result will be relatively expensive. In that case, consider converting A to a dense matrix and using scipy.linalg.solve or its variants.\\
 Usa SEMPRE la fattorizzazione LU\\
-Come tratta le matrici definite positive e quelle generiche? Non importa perchè usa sempre LU, che va bene per tutte ? solve invece usa Cholesky?? C’\'e un modo per usare Cholesky in Scipy??
+Come tratta le matrici definite positive e quelle generiche? Non importa perchÃ¨ usa sempre LU, che va bene per tutte ? solve invece usa Cholesky?? Câ€™\'e un modo per usare Cholesky in Scipy??
 \end{frame}
 
 %------------------------------------------------
@@ -284,7 +276,7 @@ Hook$\_$1498 & Y & Y & Y\\
 
 \begin{frame}
 \frametitle{Grafici}
-Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocità, precisione, occupazione di memoria
+Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocitÃ , precisione, occupazione di memoria
 \end{frame}
 
 \begin{frame}
