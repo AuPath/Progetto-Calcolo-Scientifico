@@ -1,20 +1,20 @@
 import sys
 
+from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import (QApplication, QFormLayout, QLabel, QLineEdit,
                              QWidget, QGridLayout, QVBoxLayout, QHBoxLayout,
-                             QPushButton, QFileDialog)
+                             QPushButton, QFileDialog, QProgressBar, QSpacerItem)
+
+from src.dct import Worker
 
 
 class Window(QWidget):
     def __init__(self):
         super().__init__()
 
-        # Variables
-        self.input_path = None
-        self.output_path = None
-        self.f = None
-        self.d = None
+        self.setup_ui()
 
+    def setup_ui(self):
         # Window parameters
         self.setWindowTitle("MCS - DCT")
         self.setMinimumWidth(500)
@@ -31,6 +31,9 @@ class Window(QWidget):
         self.input_line_edit = QLineEdit()
         self.output_line_edit = QLineEdit()
 
+        # Label
+        self.progress_bar = QProgressBar()
+
         self.f_parameter_line_edit = QLineEdit()
         self.d_parameter_line_edit = QLineEdit()
 
@@ -44,6 +47,8 @@ class Window(QWidget):
 
         self.layout.addLayout(self.grid_layout)
         self.layout.addLayout(self.form_layout)
+        self.layout.addItem(QSpacerItem(20, 20))
+        self.layout.addWidget(self.progress_bar)
         self.layout.addLayout(self.horizontal_layout)
         self.setLayout(self.layout)
 
@@ -71,14 +76,10 @@ class Window(QWidget):
     def get_image_file(self):
         filter_file = 'Image Files (*.bmp)\nAll Files (*.*)'
         path, _ = QFileDialog().getOpenFileName(self, 'Image', filter=filter_file)
-        print(f"Input Path: {path}")
-        self.input_path = path
         self.input_line_edit.setText(path)
 
     def get_output_folder(self):
         path = QFileDialog().getExistingDirectory(self, 'Output folder')
-        print(f"Output Path: {path}")
-        self.output_path = path
         self.output_line_edit.setText(path)
 
     def reset_fields(self):
@@ -86,23 +87,36 @@ class Window(QWidget):
         self.output_line_edit.setText("")
         self.f_parameter_line_edit.setText("")
         self.d_parameter_line_edit.setText("")
-        self.input_path = None
-        self.output_path = None
-        self.d = None
-        self.f = None
+        self.progress_bar.setValue(0)
+        self.thread.quit()
 
     def compute(self):
-        self.update_variables()
-        print(f"Input file: {self.input_path}")
-        print(f"Output folder: {self.output_path}")
-        print(f"F parameter: {self.f}")
-        print(f"d parameter: {self.d}")
+        self.progress_bar.setValue(0)
 
-    def update_variables(self):
-        self.input_path = self.input_line_edit.text()
-        self.output_path = self.output_line_edit.text()
-        self.f = self.f_parameter_line_edit.text()
-        self.d = self.d_parameter_line_edit.text()
+        # Step 2: Create a QThread object
+        self.thread = QThread()
+        # Step 3: Create a worker object
+        self.worker = Worker(self.progress_bar, self.input_line_edit.text(),
+                             self.f_parameter_line_edit.text(), self.d_parameter_line_edit.text())
+        # Step 4: Move worker to the thread
+        self.worker.moveToThread(self.thread)
+        # Step 5: Connect signals and slots
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.progress.connect(self.report_progress)
+        # Step 6: Start the thread
+        self.thread.start()
+
+        # Final resets
+        self.compute_button.setEnabled(False)
+        self.thread.finished.connect(
+            lambda: self.compute_button.setEnabled(True)
+        )
+
+    def report_progress(self, i):
+        self.progress_bar.setValue(i)
 
 
 if __name__ == "__main__":
