@@ -6,31 +6,30 @@ import numpy as np
 import sys
 import time
 
-args = sys.argv
-matrix_file = args[1]
-result_file = args[2]
+matrix_file = sys.argv[1]           # Path matrice input
+result_file = sys.argv[2]           # Path matrice output
 
 struct = loadmat(matrix_file)
 
-# Matrix
-A = struct['Problem']['A'][0, 0]
-# Exact solution
-xe = np.ones(A.shape[0])
-# Compute b
-b = A.dot(xe)
-# Solve the linear system
-start_time = time.time()
+A = struct['Problem']['A'][0, 0]    # Accesso matrice
+xe = np.ones(A.shape[0])            # Ground truth soluzione
+b = A.dot(xe)                       # Termine noto dato xe
 
+start_time = time.time()            # Start timer
 try:
-    factor = cholesky(A)
-    x = factor(b)
+    # Calcolo soluzione con Cholesky
+    factor = cholesky(A)            # Fattorizzazione con Cholesky
+    x = factor(b)                   # Calcolo soluzione con fattorizzazione
 except CholmodNotPositiveDefiniteError:
+    # Eccezione: La matrice non e' definita positiva
+    # Calcolo soluzione utilizzando fattorizzazione LU
     x = spsolve(A, b, use_umfpack=False)
+elapsed = time.time() - start_time  # Tempo trascorso
 
-elapsed = time.time() - start_time
-er = norm(xe - x) / norm(xe)
-m_size = A.shape[0] * A.shape[1]
-nnz = A.nnz
+er = norm(xe - x) / norm(xe)        # Errore relativo
+m_size = A.shape[0] * A.shape[1]    # Dimensione matrice
+nnz = A.nnz                         # Elementi non zero della matrice
 
+# Scrittura risultati su file
 with open(result_file, 'a+') as f:
     f.write(f'{m_size};{nnz};{er};{elapsed}')
