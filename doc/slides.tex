@@ -80,7 +80,40 @@
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage{amsmath}
 \usepackage{textcomp}
+\usepackage{listings}
+\usepackage{xcolor}
 
+\definecolor{commentsColor}{rgb}{0.497495, 0.497587, 0.497464}
+\definecolor{keywordsColor}{rgb}{0.000000, 0.000000, 0.635294}
+\definecolor{stringColor}{rgb}{0.558215, 0.000000, 0.135316}
+
+\lstset{ %
+	backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+	basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+	breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+	breaklines=true,                 % sets automatic line breaking
+	captionpos=b,                    % sets the caption-position to bottom
+	commentstyle=\color{commentsColor}\textit,    % comment style
+	deletekeywords={...},            % if you want to delete keywords from the given language
+	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+	extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+	frame=tb,	                   	   % adds a frame around the code
+	keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+	keywordstyle=\color{keywordsColor}\bfseries,       % keyword style
+	language=Python,                 % the language of the code (can be overrided per snippet)
+	otherkeywords={*,...},           % if you want to add more keywords to the set
+	numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+	numbersep=5pt,                   % how far the line-numbers are from the code
+	numberstyle=\tiny\color{commentsColor}, % the style that is used for the line-numbers
+	rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+	showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+	showstringspaces=false,          % underline spaces within strings only
+	showtabs=false,                  % show tabs within strings adding particular underscores
+	stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+	stringstyle=\color{stringColor}, % string literal style
+	tabsize=2,	                   % sets default tabsize to 2 spaces
+	columns=fixed                    % Using fixed column width (for e.g. nice alignment)
+}
 
 \AtBeginSection[]{
 	\frame{
@@ -272,19 +305,79 @@ Hook$\_$1498 & Y & Y & Y\\
 \bottomrule
 \end{tabular}
 \end{table}
+Durante l'esecuzione di ogni script si suppone di non essere a conoscenza di queste informazioni, cos\'i da rimanere il pi\'u generali possibili.
 \end{frame}
 
 \begin{frame}
-\frametitle{Grafici}
-Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocità, precisione, occupazione di memoria
+	\frametitle{Dimensione delle matrici}
+	\begin{figure}
+		\includegraphics[width=0.8\textheight]{assets/dimension2.jpg}
+		\caption{Confronto delle dimensioni e del numero di nnz delle matrici.}
+		\label{fig:dim}
+	\end{figure}
 \end{frame}
 
 \begin{frame}
-\frametitle{Grafici riassuntivi di confronto}
+\frametitle{Grafici performance}
+Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocità, precisione e occupazione di memoria.
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Tempo di esecuzione}
+	\begin{figure}
+		\includegraphics[width=1.35\textheight]{assets/execution.jpg}
+		\caption{Confronto tempo di esecuzione.}
+		\label{fig:execution}
+	\end{figure}
 \end{frame}
 
 \begin{frame}
-\frametitle{Listato}
+	\frametitle{Memoria utilizzata}
+	\begin{figure}
+		\includegraphics[width=1.35\textheight]{assets/memory.jpg}
+		\caption{Picco di memoria utilizzata (in byte).}
+		\label{fig:memory}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Tempo di esecuzione}
+	\begin{figure}
+		\includegraphics[width=1.35\textheight]{assets/error.jpg}
+		\caption{Confronto errore relativo soluzione.}
+		\label{fig:error}
+	\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Codice}
+Scipt per il calcolo delle soluzione tra i vari linguaggi di programmazione
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Codice - Matlab}
+	\lstinputlisting[language=Matlab, basicstyle=\tiny]{../src/matlab_solver.m}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Codice - Octave}
+	\lstinputlisting[language=Octave, basicstyle=\tiny]{../src/octave_solver.m}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Codice - Python}
+	\lstinputlisting[language=Python, , firstline=8, basicstyle=\tiny]{../src/python_solver.py}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Codice - Python ottimizzato}
+	\lstinputlisting[language=Python, firstline=9, basicstyle=\tiny]{../src/python_solver_optimized.py}
 \end{frame}
 
 \section{JPEG}
