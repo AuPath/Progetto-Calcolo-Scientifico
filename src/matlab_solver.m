@@ -1,30 +1,22 @@
 function [] = matlab_solver(matrix_file, result_file)
 
-% da cmd
-% matlab  -nodisplay -nosplash -nodesktop -r "matlab_test('Matrici-test/nome-matrice.mat', 'nome-matrice-result.txt');exit;"
+    load(matrix_file);              % Carica matrice dato il path
+    A = Problem.A;                  % Accesso effettivo alla matrice
 
-% Si aspetta come parametri "File matrice" e
-% "nome file dove salvare i risulati"
-% in questo ordine.
+    xe = ones(length(A(:,1)), 1);   % Ground truth soluzione
+    b = A * xe;                     % Calcolo termine noto data soluzione
 
-load(matrix_file);
-A = Problem.A;
+    tic;                            % Inizio timer
+    x = A \ b;                      % Calcolo della soluzione
+    time = toc;                     % Tmpo impiegato
 
-% preparo il sistema
-xe = ones(length(A(:,1)), 1); % soluzione esatta
-b = A * xe;
+    % Statistice
+    er = norm(xe - x) / norm(xe);   % Errore relativo
+    m_size = numel(A);              % Dimensione matrice
+    m_nnz = nnz(A)                  % Elementi non zero matrice
 
-tic; % inizio timer funzione
-x = A \ b; % ottimizza in automatico
-time = toc; % tempo impiegato
-
-% statistiche
-er = norm(xe - x) / norm(xe); % errore relativo
-m_size = numel(A); % dimensione matrice
-nnzero = nnz(A);
-
-fid = fopen(result_file, "a+"); % scrittura nel file, a+ sta per append
-fprintf(fid, "%d;%d;%d;%d", m_size, nnzero, er, time);
-fclose(fid);
+    fid = fopen(result_file, "a+"); % Apri file in append
+    fprintf(fid, "%d;%d;%d;%d", m_size, m_nnz, er, time);
+    fclose(fid);                    % Chiudi il file
 
 end

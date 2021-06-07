@@ -12,8 +12,6 @@ class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(int)
 
-    max_value = 5
-
     def __init__(self, progress_bar: QProgressBar, img_path, f, d):
         super(Worker, self).__init__()
         self.img_path = img_path

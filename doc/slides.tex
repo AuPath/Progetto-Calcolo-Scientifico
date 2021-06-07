@@ -80,7 +80,40 @@
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage{amsmath}
 \usepackage{textcomp}
+\usepackage{listings}
+\usepackage{xcolor}
 
+\definecolor{commentsColor}{rgb}{0.497495, 0.497587, 0.497464}
+\definecolor{keywordsColor}{rgb}{0.000000, 0.000000, 0.635294}
+\definecolor{stringColor}{rgb}{0.558215, 0.000000, 0.135316}
+
+\lstset{ %
+	backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+	basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+	breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+	breaklines=true,                 % sets automatic line breaking
+	captionpos=b,                    % sets the caption-position to bottom
+	commentstyle=\color{commentsColor}\textit,    % comment style
+	deletekeywords={...},            % if you want to delete keywords from the given language
+	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+	extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+	frame=tb,	                   	   % adds a frame around the code
+	keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+	keywordstyle=\color{keywordsColor}\bfseries,       % keyword style
+	language=Python,                 % the language of the code (can be overrided per snippet)
+	otherkeywords={*,...},           % if you want to add more keywords to the set
+	numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+	numbersep=5pt,                   % how far the line-numbers are from the code
+	numberstyle=\tiny\color{commentsColor}, % the style that is used for the line-numbers
+	rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+	showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+	showstringspaces=false,          % underline spaces within strings only
+	showtabs=false,                  % show tabs within strings adding particular underscores
+	stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+	stringstyle=\color{stringColor}, % string literal style
+	tabsize=2,	                   % sets default tabsize to 2 spaces
+	columns=fixed                    % Using fixed column width (for e.g. nice alignment)
+}
 
 \AtBeginSection[]{
 	\frame{
@@ -233,22 +266,27 @@ Octave \'e documentato in modo scomodo rispetto a Matlab alla pagina \url{https:
 \end{frame}
 
 \begin{frame}
-\frametitle{Python (numpy + scipy + scikit-sparse)}
+\frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
 Python è un linguaggio di programmazione general purpose. Abbiamo utilizzato 3 librerie apposite per il calcolo scientifico, ognuna con un compito diverso.
 \begin{enumerate}
-	\item \textit{numpy}: Libreria utilizzata per leggere e gestire le matrice in memoria
-	\item \textit{scipy}: Libreria specifica per il calcolo scientifico. Utilizza metodi diretti per il calcolo della soluzione di un sistema.\\
-	Il metodo standars per la risoluzione diretta di sistemi lineari non è ottimizzata così come matlab o octave.\\
-	Supporta la fattorizzazione LU tuttavia non è abilitata di default.\\
-	Non supporta cholesky su matrici sparci
-	\item scikit-sparse: Cholsesky su matrici sparse. Implementazione in c.
+\item \textit{numpy}: libreria utilizzata per leggere e gestire le matrice in memoria
+\item \textit{scipy}: libreria specifica per il calcolo scientifico. Utilizza metodi diretti per il calcolo della soluzione di un sistema.\\
+Il metodo standard per la risoluzione diretta di sistemi lineari non \'e ottimizzato come in Matlab o Octave, ovvero non divide i risolutori in base alla matrice. Supporta la fattorizzazione LU tuttavia non \'e abilitata di default; non supporta Cholesky su matrici sparse.
+\item \textit{scikit-sparse}: libreria che permette di applicare Cholsesky su matrici sparse; \'e implementata in c.
 \end{enumerate}
-Scipy \'e documentato peggio di Matlab ma meglio di Octave \\
-Come salva le matrici sparse? Numpy/Scipy si salva le matrici sparse solo con gli indici e il valore degli elementi diversi da zero\\
-Come risolve il sistema lineare?
-For solving the matrix expression AX = B, this solver assumes the resulting matrix X is sparse, as is often the case for very sparse inputs. If the resulting X is dense, the construction of this sparse result will be relatively expensive. In that case, consider converting A to a dense matrix and using scipy.linalg.solve or its variants.\\
-Usa SEMPRE la fattorizzazione LU\\
-Come tratta le matrici definite positive e quelle generiche? Non importa perchè usa sempre LU, che va bene per tutte ? solve invece usa Cholesky?? C’\'e un modo per usare Cholesky in Scipy??
+\end{frame}
+\begin{frame}
+\frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
+\textit{numpy} e \textit{scipy} \'e documentato peggio di Matlab ma meglio di Octave: ci sono molti esempi ed \'e disponibile il codice essendo open source, anche non essendo presente una buona spiegazione del workflow come in Matlab, si pu\'o capire leggendo il codice; la documentazione si trova alla pagina \url{https://www.scipy.org/docs.html}.\\ \textit{sciki-sparse} non ha una documentazione chiara, ma anche in questo caso, essendo open source, \'e possibile leggere direttamente il codice; la documentazione si trova alla pagina \url{https://scikit-sparse.readthedocs.io/en/latest/cholmod.html}.
+\end{frame}
+\begin{frame}
+\frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
+\textbf{Memorizzazione di matrici sparse}: \textit{numpy} salva le matrici sparse come Matlab.\\
+\textbf{Risoluzione di $Ax = b$}: il risolutore assume che la soluzione $x$ sia sparsa, perch\'e pu\'o capitare spesso; se invece $x$ \'e densa, la costruzione risulta molto pi\'u costosa. Utilizza sempre la fattorizzazione LU per risolvere il sistema, quindi il suo comportamento non \'e differente nel caso di matrici simmetriche e definite positive, perch\'e non utilizza mai Cholesky; per questo motivo abbiamo introdotto la libreria \textit{scikit-sparse}, che permette di applicare Cholesky a grandi matrici sparse, perci\'o abbiamo potuto adattare l'algoritmo scritto in Python ai casi di matrici simmetriche e definite positive.
+\end{frame}
+
+\begin{frame}
+\frametitle{Nuovo workflow con \textit{scikit-sparse}}
 \end{frame}
 
 %------------------------------------------------
@@ -265,26 +303,86 @@ Hook$\_$1498 & Y & Y & Y\\
  G3$\_$circuit & Y & Y & Y\\
  nd24k & Y & Y & Y\\
  boundle$\_$adj & Y & Y & Y\\
- ifiss$\_$mat & N & N & N\\  
+ ifiss$\_$mat & N & N & N\\
  TSC$\_$OPF$\_$1047 & Y & N & N\\
  ns3Da & N & N & N\\
  GT01R & N & N & N \\
 \bottomrule
 \end{tabular}
 \end{table}
+Durante l'esecuzione di ogni script si suppone di non essere a conoscenza di queste informazioni, cos\'i da rimanere il pi\'u generali possibili.
 \end{frame}
 
 \begin{frame}
-\frametitle{Grafici}
-Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocità, precisione, occupazione di memoria
+	\frametitle{Dimensione delle matrici}
+	\begin{figure}
+		\includegraphics[width=0.8\textheight]{assets/dimension2.jpg}
+		\caption{Confronto delle dimensioni e del numero di nnz delle matrici.}
+		\label{fig:dim}
+	\end{figure}
 \end{frame}
 
 \begin{frame}
-\frametitle{Grafici riassuntivi di confronto}
+\frametitle{Grafici performance}
+Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocità, precisione e occupazione di memoria.
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Tempo di esecuzione}
+	\begin{figure}
+		\includegraphics[width=1.35\textheight]{assets/execution.jpg}
+		\caption{Confronto tempo di esecuzione.}
+		\label{fig:execution}
+	\end{figure}
 \end{frame}
 
 \begin{frame}
-\frametitle{Listato}
+	\frametitle{Memoria utilizzata}
+	\begin{figure}
+		\includegraphics[width=1.35\textheight]{assets/memory.jpg}
+		\caption{Picco di memoria utilizzata (in byte).}
+		\label{fig:memory}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Tempo di esecuzione}
+	\begin{figure}
+		\includegraphics[width=1.35\textheight]{assets/error.jpg}
+		\caption{Confronto errore relativo soluzione.}
+		\label{fig:error}
+	\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Codice}
+Scipt per il calcolo delle soluzione utilizzando le diverse librerie.
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Codice - Matlab}
+	\lstinputlisting[language=Matlab, basicstyle=\tiny]{../src/matlab_solver.m}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Codice - Octave}
+	\lstinputlisting[language=Octave, basicstyle=\tiny]{../src/octave_solver.m}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Codice - Python}
+	\lstinputlisting[language=Python, , firstline=8, basicstyle=\tiny]{../src/python_solver.py}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Codice - Python ottimizzato}
+	\lstinputlisting[language=Python, firstline=9, basicstyle=\tiny]{../src/python_solver_optimized.py}
 \end{frame}
 
 \section{JPEG}
@@ -434,4 +532,4 @@ This statement requires citation \cite{p1}.
 
 %----------------------------------------------------------------------------------------
 
-\end{document} 
+\end{document}
