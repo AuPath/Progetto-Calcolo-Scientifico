@@ -82,6 +82,7 @@
 \usepackage{textcomp}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{hyperref}
 
 \definecolor{commentsColor}{rgb}{0.497495, 0.497587, 0.497464}
 \definecolor{keywordsColor}{rgb}{0.000000, 0.000000, 0.635294}
@@ -250,18 +251,23 @@ University of Milano Bicocca \\ % Your institution for the title page
 
 \subsection{Analisi delle librerie}
 
-\begin{frame}
-	
+\begin{frame}	
 \frametitle{Matlab}
 Matlab \'e ben documentato alla pagina \url{it.mathworks.com/help/matlab}, con motore di ricerca ed esempi.\\
-\textbf{Memorizzazione di matrici sparse}: data una matrice sparsa, Matlab salva solo gli elementi diversi da 0 in una lista, insieme al numero di colonna e riga. \\
+\textbf{Memorizzazione di matrici sparse}: data una matrice sparsa, Matlab salva solo gli elementi diversi da 0 in una lista, insieme al numero di colonna e riga. 
+\end{frame}
+\begin{frame}
+\frametitle{Matlab}
 \textbf{Risoluzione di $Ax = b$}: Matlab ha a disposizione tanti risolutori di sistemi, il cui uso dipende dalla forma della matrice $A$; pertanto, quando viene eseguito il comando $A \setminus b$ si fanno una serie di controlli su $A$, i casi presi in considerazione sono: matrice quadrata, triangolare, triangolare permutata, Hermitiana, Hessenberg superiore, la matrice ha la diagonale tutta positiva o tutta negativa, la matrice \'e simmetrica e definita positiva. In tutti questi casi viene usato un solutore diverso, ad esempio se la matrice \'e simmetrica e definita positiva si applica l'algoritmo di Cholesky.
 \end{frame}
 
 \begin{frame}
 \frametitle{Octave}
 Octave \'e documentato in modo scomodo rispetto a Matlab alla pagina \url{https://octave.org/doc/v6.2.0}, che \'e un semplice manuale. \\
-\textbf{Memorizzazione di matrici sparse}: usa il \textit{compressed column format}, ovvero salva solo gli elementi diversi da 0 con il proprio numero di riga, e per ogni colonna salva il numero di elementi diversi da 0 per quella colonna; pertanto al posto di una tripletta per ogni elemento diverso da 0, si salva una coppia e in pi\'u un numero per ogni colonna, ottimizzando la memorizzazione. \\
+\textbf{Memorizzazione di matrici sparse}: usa il \textit{compressed column format}, ovvero salva solo gli elementi diversi da 0 con il proprio numero di riga, e per ogni colonna salva il numero di elementi diversi da 0 per quella colonna; pertanto al posto di una tripletta per ogni elemento diverso da 0, si salva una coppia e in pi\'u un numero per ogni colonna, ottimizzando la memorizzazione.
+\end{frame} 
+\begin{frame}
+\frametitle{Octave}
 \textbf{Risoluzione di $Ax = b$}: si comporta allo stesso modo di Matlab, ovvero considera la forma della matrice $A$ per scegliere il risolutore adatto. Anche Octave, come Matlab, prova ad applicare Cholesky e se non riesce significa che la matrice non \'e definita positiva e/o simmetrica.
 \end{frame}
 
@@ -406,16 +412,30 @@ Ci aspettiamo quindi che il plot risulti in due rette (circa) con coefficiente a
 \end{frame}
 
 \begin{frame}
+\frametitle{Algoritmo}
+	\lstinputlisting[language=Python, firstline=21, lastline=34]{../src/latex_dct2.py}
+\end{frame}
+
+\begin{frame}
+\frametitle{Algoritmo}
+	\lstinputlisting[language=Python, firstline=7, lastline=16]{../src/latex_dct2.py}
+\end{frame}
+
+\begin{frame}
+\frametitle{Algoritmo}
+	\lstinputlisting[language=Python, firstline=37, lastline=52]{../src/latex_dct2.py}
+\end{frame}
+
+\begin{frame}
 \frametitle{Notizie su scipy.fft}
+\url{docs.scipy.org/doc/scipy/reference/generated/scipy.fftpack.dct.html}\\
+	For a single dimension array x, dct(x, norm='ortho') is equal to MATLAB dct(x). Ma \'e fft? Mi sa di no, provare fft
+	 \url{docs.scipy.org/doc/scipy/reference/tutorial/fft.html}
 \end{frame}
 
 \begin{frame}
 \frametitle{Confronto tra Custom DCT2 e FFT}
 grafici - la dct \'e $O(N^3)$, la FFT \'e $O(N^2)$
-\end{frame}
-
-\begin{frame}
-\frametitle{listato}
 \end{frame}
 
 \subsection{Custom JPEG}
