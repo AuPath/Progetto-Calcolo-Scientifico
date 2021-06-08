@@ -44,19 +44,25 @@ my_times = []
 # piu di 14 e' troppo
 for i in range(4, 15):
     N = 2 ** i
-    print(str(i) + " di 15")
+    print(str(i) + " di 14")
     a = np.random.rand(N, N)
 
+    print("fft " + str(i) + " di 14")
     lib_ti = time.time()
     lib_dct = fft(fft(a, axis=1, norm="ortho"), axis=0, norm="ortho")
     lib_tf = time.time()
     lib_times.append(lib_tf - lib_ti)
+    if i == 14:
+        print('-'*15 + " FINE FFT " + '-'*15)
 
     if i < 12: # di piu non va
+        print("my_dct " + str(i) + " di 11")
         my_ti = time.time()
         my_dct = dct2_personal(a)
         my_tf = time.time()
         my_times.append(my_tf - my_ti)
+        if i == 11:
+            print('-'*15 + " FINE MY_DCT " + '-'*15)
 
 
 sns.set_theme(style="darkgrid")
