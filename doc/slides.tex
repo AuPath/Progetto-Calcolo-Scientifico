@@ -422,14 +422,67 @@ grafici - la dct \'e $O(N^3)$, la FFT \'e $O(N^2)$
 
 \begin{frame}
 \frametitle{Algoritmo}
+\lstinputlisting[language=Python, firstline=1, lastline=5]{../src/latex_pseudo_jpeg.py}
+\lstinputlisting[language=Python, firstline=7, lastline=13]{../src/latex_pseudo_jpeg.py}
+
 \end{frame}
 
 \begin{frame}
-\frametitle{Algoritmo}
+	\frametitle{Algoritmo}
+\lstinputlisting[language=Python, firstline=15, lastline=22]{../src/latex_pseudo_jpeg.py}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Algoritmo}
+	\lstinputlisting[language=Python, firstline=24, lastline=30, basicstyle=\tiny]{../src/latex_pseudo_jpeg.py}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Algoritmo}
+	\lstinputlisting[language=Python, firstline=32, lastline=37]{../src/latex_pseudo_jpeg.py}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Algoritmo}
+	\lstinputlisting[language=Python, firstline=39, lastline=49, basicstyle=\tiny]{../src/latex_pseudo_jpeg.py}
 \end{frame}
 
 \begin{frame}
 \frametitle{Esempi con le immagini proposte}
+\begin{figure}
+	\centering
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\fbox{\includegraphics[width=.4\linewidth]{../images/jump1.png}}
+		\caption{Originale 400x400}
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\fbox{\includegraphics[width=.4\linewidth]{../images/jump1-compressed-99-1.png}}
+		\caption{f = 99, d = 1}
+	\end{minipage}	
+	
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Esempi con le immagini proposte}
+	\begin{figure}
+		\centering
+		\begin{minipage}{.5\textwidth}
+			\centering
+			\fbox{\includegraphics[width=.4\linewidth]{../images/jump1-compressed-99-20.png}}
+			\caption{f = 99, d = 20}
+		\end{minipage}%
+		\begin{minipage}{.5\textwidth}
+			\centering
+			\fbox{\includegraphics[width=.4\linewidth]{../images/jump1-compressed-99-196.png}}
+			\caption{f = 99, d = 196}
+		\end{minipage}	
+		
+	\end{figure}
+	
 \end{frame}
 
 \begin{frame}
