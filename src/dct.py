@@ -21,7 +21,7 @@ class Worker(QObject):
 
     def run(self):
         img = Image.fromarray(self.pseudo_jpeg(self.img_path, self.f, self.d))
-        cmpr_img_path = self.img_path.replace(".bmp", "-compressed.bmp")
+        cmpr_img_path = self.img_path.replace(".bmp", "-compressed-{f}-{d}.bmp".format(f=self.f,d=self.d))
         img.save(cmpr_img_path)
         self.finished.emit()
 
