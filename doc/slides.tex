@@ -82,6 +82,7 @@
 \usepackage{textcomp}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{hyperref}
 
 \definecolor{commentsColor}{rgb}{0.497495, 0.497587, 0.497464}
 \definecolor{keywordsColor}{rgb}{0.000000, 0.000000, 0.635294}
@@ -396,16 +397,30 @@ array crescenti di dimensione $2^i$
 \end{frame}
 
 \begin{frame}
+\frametitle{Algoritmo}
+	\lstinputlisting[language=Python, firstline=21, lastline=34]{../src/latex_dct2.py}
+\end{frame}
+
+\begin{frame}
+\frametitle{Algoritmo}
+	\lstinputlisting[language=Python, firstline=7, lastline=16]{../src/latex_dct2.py}
+\end{frame}
+
+\begin{frame}
+\frametitle{Algoritmo}
+	\lstinputlisting[language=Python, firstline=37, lastline=52]{../src/latex_dct2.py}
+\end{frame}
+
+\begin{frame}
 \frametitle{Notizie su scipy.fft}
+\url{docs.scipy.org/doc/scipy/reference/generated/scipy.fftpack.dct.html}\\
+	For a single dimension array x, dct(x, norm='ortho') is equal to MATLAB dct(x). Ma \'e fft? Mi sa di no, provare fft
+	 \url{docs.scipy.org/doc/scipy/reference/tutorial/fft.html}
 \end{frame}
 
 \begin{frame}
 \frametitle{Confronto tra Custom DCT2 e FFT}
 grafici - la dct \'e $O(N^3)$, la FFT \'e $O(N^2)$
-\end{frame}
-
-\begin{frame}
-\frametitle{listato}
 \end{frame}
 
 \subsection{Custom JPEG}
