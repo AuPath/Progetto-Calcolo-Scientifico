@@ -64,12 +64,11 @@ for i in range(4, 15):
         if i == 11:
             print('-'*15 + " FINE MY_DCT " + '-'*15)
 
+for i in range(12,15):
+    my_times.append(0)
 
 sns.set_theme(style="darkgrid")
 
 data = pd.DataFrame(list(zip(lib_times, my_times)), columns=['Scipy FFT', 'HomeMade DCT'])
 data.to_pickle(os.path.join(".", "out-dct", "data-dct.pkl"))
 
-data = pd.read_pickle(os.path.join(".", "out-dct", "data-dct.pkl"))
-g = sns.lineplot(data=data)
-g.set(yscale='log')
