@@ -11,6 +11,7 @@ from scipy.fft import idct
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(int)
+    out_path = pyqtSignal(str)
 
     def __init__(self, progress_bar: QProgressBar, img_path, f, d):
         super(Worker, self).__init__()
@@ -23,6 +24,7 @@ class Worker(QObject):
         img = Image.fromarray(self.pseudo_jpeg(self.img_path, self.f, self.d))
         cmpr_img_path = self.img_path.replace(".bmp", "-compressed-{f}-{d}.bmp".format(f=self.f,d=self.d))
         img.save(cmpr_img_path)
+        self.out_path.emit(cmpr_img_path)
         self.finished.emit()
 
     ## fissa un range di valori possibili per n

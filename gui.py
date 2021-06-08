@@ -1,11 +1,15 @@
 import sys
 
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, pyqtSlot
 from PyQt5.QtWidgets import (QApplication, QFormLayout, QLabel, QLineEdit,
                              QWidget, QGridLayout, QVBoxLayout, QHBoxLayout,
                              QPushButton, QFileDialog, QProgressBar, QSpacerItem)
 
 from src.dct import Worker
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import os
+from PIL import Image
 
 
 class Window(QWidget):
@@ -18,6 +22,7 @@ class Window(QWidget):
         # Window parameters
         self.setWindowTitle("MCS - DCT")
         self.setMinimumWidth(500)
+        self.image_compare_path = None
 
         # Outer layout
         self.layout = QVBoxLayout()
@@ -39,6 +44,7 @@ class Window(QWidget):
 
         self.reset_button = QPushButton("Reset")
         self.compute_button = QPushButton("Compute")
+        self.compare_button = QPushButton("Compare")
 
         # Build layouts
         self.build_path_grid()
@@ -70,8 +76,11 @@ class Window(QWidget):
     def build_buttons_box(self):
         self.reset_button.clicked.connect(self.reset_fields)
         self.horizontal_layout.addWidget(self.reset_button)
+        self.compare_button.clicked.connect(self.show_image_compare)
+        self.horizontal_layout.addWidget(self.compare_button)
         self.compute_button.clicked.connect(self.compute)
         self.horizontal_layout.addWidget(self.compute_button)
+        self.compare_button.setEnabled(False)
 
     def get_image_file(self):
         filter_file = 'Image Files (*.bmp)\nAll Files (*.*)'
@@ -88,7 +97,31 @@ class Window(QWidget):
         self.f_parameter_line_edit.setText("")
         self.d_parameter_line_edit.setText("")
         self.progress_bar.setValue(0)
-        self.thread.quit()
+        self.compare_button.setEnabled(False)
+        self.image_compare_path = None
+
+    def show_image_compare(self):
+        try:
+            img_original = Image.open(self.input_line_edit.text())
+            img_compressed = Image.open(self.image_compare_path)
+
+            fig = plt.figure()
+            ax1 = fig.add_subplot(1, 2, 1)
+            ax2 = fig.add_subplot(1, 2, 2)
+            ax1.imshow(img_original, cmap=cm.gray)
+            ax2.imshow(img_compressed, cmap=cm.gray)
+
+            fig.canvas.set_window_title("JPEG Compression result")
+            ax1.title.set_text("Original Image")
+            filename = os.path.split(self.image_compare_path)[-1]
+            parameters_parsed = filename.split('.')[0].split('-')
+            F, d = parameters_parsed[2], parameters_parsed[3]
+            ax2.title.set_text(f"Compressed image (F = {F}, d = {d})")
+            fig.suptitle('Image comparison: original vs compressed', fontsize=16)
+
+            plt.show()
+        except FileNotFoundError:
+            pass
 
     def compute(self):
         self.progress_bar.setValue(0)
@@ -96,24 +129,33 @@ class Window(QWidget):
         # Step 2: Create a QThread object
         self.thread = QThread()
         # Step 3: Create a worker object
-        self.worker = Worker(self.progress_bar, self.input_line_edit.text(),
-                             self.f_parameter_line_edit.text(), self.d_parameter_line_edit.text())
-        # Step 4: Move worker to the thread
-        self.worker.moveToThread(self.thread)
-        # Step 5: Connect signals and slots
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        self.worker.progress.connect(self.report_progress)
-        # Step 6: Start the thread
-        self.thread.start()
+        try:
+            self.worker = Worker(self.progress_bar, self.input_line_edit.text(),
+                                 self.f_parameter_line_edit.text(), self.d_parameter_line_edit.text())
+            # Step 4: Move worker to the thread
+            self.worker.moveToThread(self.thread)
+            # Step 5: Connect signals and slots
+            self.thread.started.connect(self.worker.run)
+            self.worker.finished.connect(self.thread.quit)
+            self.worker.finished.connect(self.worker.deleteLater)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.worker.progress.connect(self.report_progress)
+            self.worker.out_path.connect(self.report_out_path)
+            # Step 6: Start the thread
+            self.thread.start()
 
-        # Final resets
-        self.compute_button.setEnabled(False)
-        self.thread.finished.connect(
-            lambda: self.compute_button.setEnabled(True)
-        )
+            # Final resets
+            self.compute_button.setEnabled(False)
+            self.thread.finished.connect(self.compute_finished)
+        except ValueError:
+            pass
+
+    def compute_finished(self):
+        self.compute_button.setEnabled(True)
+        self.compare_button.setEnabled(True)
+
+    def report_out_path(self, out_path):
+        self.image_compare_path = out_path
 
     def report_progress(self, i):
         self.progress_bar.setValue(i)
