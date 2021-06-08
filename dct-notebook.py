@@ -69,6 +69,6 @@ for i in range(12,15):
 
 sns.set_theme(style="darkgrid")
 
-data = pd.DataFrame(list(zip(lib_times, my_times)), columns=['Scipy FFT', 'HomeMade DCT'])
+data = pd.DataFrame(list(zip(lib_times, my_times)), columns=['Numpy FFT', 'HomeMade DCT'])
 data.to_pickle(os.path.join(".", "out-dct", "data-dct.pkl"))
 
