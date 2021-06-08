@@ -391,8 +391,18 @@ Scipt per il calcolo delle soluzione utilizzando le diverse librerie.
 
 \begin{frame}
 \frametitle{Algoritmo usato}
-DCT2 fatta con numpy e FFT per confrontare presa da scipy.fft
-array crescenti di dimensione $2^i$
+Per il calcolo della FFT utilizziamo la funzione scipy.fft della libreria scipy. Le matrici vengono create con numpy di dimensione $2^i$ con $1\leq i \leq 12$.\\
+Questo è utile per motivi di visualizzazione del tempo di esecuzione, infatti per quanto riguarda il costo computazionale:
+\begin{itemize}
+	\item DCT (implementata da noi): $O(n^3)$
+	\item FFT (scipy.fft): $O(n^2log(n))$
+\end{itemize}
+Andando a plottare il tempo di esecuzione in secondi al variare della dimensione delle matrici $2^i$ con $i$ screscente, riportando le ascisse su scala logaritmica si ha:\\
+\begin{itemize}
+	\item DCT: $O(n^3) \Rightarrow log((2^i)^3) =  log(2^{3i}) = 3i $
+	\item FFT: $O(n^2log(n)) \Rightarrow log((2^i)^2 log(2^i)) =  log(2^{2i}) + log(i) = 2i + log(i) \approx 2i$
+\end{itemize}
+Ci aspettiamo quindi che il plot risulti in due rette (circa) con coefficiente angolare diverso (pi\'u alto DCT pi\'u basso FFT) .
 \end{frame}
 
 \begin{frame}
