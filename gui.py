@@ -1,16 +1,20 @@
 import sys
 
-from PyQt5.QtCore import QThread, pyqtSlot
+from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import (QApplication, QFormLayout, QLabel, QLineEdit,
                              QWidget, QGridLayout, QVBoxLayout, QHBoxLayout,
                              QPushButton, QFileDialog, QProgressBar, QSpacerItem)
+from PyQt5 import QtGui
 
 from src.dct import Worker
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-import os
 from PIL import Image
+import os
 
+ASSETS_PATH = "assets"
+LOGO_NAME = 'logo.png'
+WINDOW_TITLE = "MCS - DCT"
 
 class Window(QWidget):
     def __init__(self):
@@ -19,9 +23,13 @@ class Window(QWidget):
         self.setup_ui()
 
     def setup_ui(self):
+
+
         # Window parameters
-        self.setWindowTitle("MCS - DCT")
+        self.setWindowTitle(WINDOW_TITLE)
         self.setMinimumWidth(500)
+
+        # Variables
         self.image_compare_path = None
 
         # Outer layout
@@ -111,7 +119,7 @@ class Window(QWidget):
             ax1.imshow(img_original, cmap=cm.gray)
             ax2.imshow(img_compressed, cmap=cm.gray)
 
-            fig.canvas.set_window_title("JPEG Compression result")
+            fig.canvas.manager.set_window_title("JPEG Compression result")
             ax1.title.set_text("Original Image")
             filename = os.path.split(self.image_compare_path)[-1]
             parameters_parsed = filename.split('.')[0].split('-')
@@ -130,7 +138,7 @@ class Window(QWidget):
         self.thread = QThread()
         # Step 3: Create a worker object
         try:
-            self.worker = Worker(self.progress_bar, self.input_line_edit.text(),
+            self.worker = Worker(self.progress_bar, self.input_line_edit.text(), self.output_line_edit.text(),
                                  self.f_parameter_line_edit.text(), self.d_parameter_line_edit.text())
             # Step 4: Move worker to the thread
             self.worker.moveToThread(self.thread)
@@ -163,6 +171,8 @@ class Window(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setWindowIcon(QtGui.QIcon(os.path.join(ASSETS_PATH, LOGO_NAME)))
+    app.setApplicationName(WINDOW_TITLE)
     window = Window()
     window.show()
     sys.exit(app.exec_())
