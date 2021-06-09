@@ -16,8 +16,8 @@ class Worker(QObject):
 
     def __init__(self, progress_bar: QProgressBar, img_path, out_dir, f, d):
         super(Worker, self).__init__()
-        self.img_path = img_path
-        self.out_dir = out_dir
+        self.img_path = img_path.strip()
+        self.out_dir = out_dir.strip()
         self.f = int(f)
         self.d = int(d)
         self.progress_bar = progress_bar
@@ -25,8 +25,11 @@ class Worker(QObject):
     def run(self):
         img = Image.fromarray(self.pseudo_jpeg(self.img_path, self.f, self.d))
         cmpr_img_path = self.img_path.replace(".bmp", "-compressed-{f}-{d}.bmp".format(f=self.f, d=self.d))
-        filename = os.path.split(cmpr_img_path)[-1]
-        out_path = os.path.join(self.out_dir, filename)
+
+        out_path = cmpr_img_path
+        if self.out_dir:
+            filename = os.path.split(cmpr_img_path)[-1]
+            out_path = os.path.join(self.out_dir, filename)
         img.save(out_path)
         self.out_path.emit(cmpr_img_path)
         self.finished.emit()
