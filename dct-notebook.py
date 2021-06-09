@@ -39,8 +39,6 @@ def dct_personal(v):
 
 
 lib_times = []
-my_times = []
-
 # piu di 14 e' troppo
 for i in range(4, 15):
     N = 2 ** i
@@ -55,20 +53,30 @@ for i in range(4, 15):
     if i == 14:
         print('-'*15 + " FINE FFT " + '-'*15)
 
-    if i < 12: # di piu non va
-        print("my_dct " + str(i) + " di 11")
-        my_ti = time.time()
-        my_dct = dct2_personal(a)
-        my_tf = time.time()
-        my_times.append(my_tf - my_ti)
-        if i == 11:
-            print('-'*15 + " FINE MY_DCT " + '-'*15)
+data = pd.DataFrame(lib_times, columns=['Numpy FFT'])
+data.to_pickle(os.path.join(".", "out-dct", "data-fft.pkl"))
+
+my_times = []
+
+'''
+# piu di 11 e' troppo
+for i in range(4, 12):
+    N = 2 ** i
+    print(str(i) + " di 11")
+    a = np.random.rand(N, N)
+
+    print("my_dct " + str(i) + " di 11")
+    my_ti = time.time()
+    my_dct = dct2_personal(a)
+    my_tf = time.time()
+    my_times.append(my_tf - my_ti)
+    print('-'*15 + " FINE MY_DCT " + '-'*15)
 
 for i in range(12,15):
     my_times.append(0)
-
+    
 sns.set_theme(style="darkgrid")
 
-data = pd.DataFrame(list(zip(lib_times, my_times)), columns=['Numpy FFT', 'HomeMade DCT'])
-data.to_pickle(os.path.join(".", "out-dct", "data-dct.pkl"))
-
+data = pd.DataFrame(my_times, columns=['HomeMade DCT'])
+data.to_pickle(os.path.join(".", "out-dct", "data-dct-homemade.pkl"))
+'''
