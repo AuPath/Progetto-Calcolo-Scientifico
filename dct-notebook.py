@@ -4,7 +4,6 @@ import time
 
 import numpy as np
 import pandas as pd
-import seaborn as sns
 from numpy.fft import fft
 
 
@@ -39,21 +38,35 @@ def dct_personal(v):
 
 
 lib_times = []
-# piu di 14 e' troppo
-for i in range(4, 15):
-    N = 2 ** i
-    print(str(i) + " di 14")
-    a = np.random.rand(N, N)
+run = []
+dim = []
+type = []
+for i in range(1, 11):
+    print("RUN " + str(i) + " DI 10")
+    # piu di 14 e' troppo
+    for j in range(4, 15):
+        print("fft " + str(j) + " di 14")
+        dim.append(j)
+        run.append(i)
+        type.append('Numpy FFT')
+        N = 2 ** j
+        a = np.random.rand(N, N)
 
-    print("fft " + str(i) + " di 14")
-    lib_ti = time.time()
-    lib_dct = fft(fft(a, axis=1, norm="ortho"), axis=0, norm="ortho")
-    lib_tf = time.time()
-    lib_times.append(lib_tf - lib_ti)
-    if i == 14:
-        print('-'*15 + " FINE FFT " + '-'*15)
+        lib_ti = time.time()
+        lib_dct = fft(fft(a, axis=1, norm="ortho"), axis=0, norm="ortho")
+        lib_tf = time.time()
+        lib_times.append(lib_tf - lib_ti)
 
-data = pd.DataFrame(lib_times, columns=['Numpy FFT'])
+        del a
+
+        if j == 14:
+            print('-' * 15 + " FINE FFT " + '-' * 15)
+
+    print('-' * 15 + " FINE ROUND " + str(i) + " " + '-' * 15)
+    if i == 10:
+        print('-' * 15 + " FINE " + '-' * 15)
+
+data = pd.DataFrame({'Run': run, 'Time': lib_times, 'Dimension': dim, 'Type': type})
 data.to_pickle(os.path.join(".", "out-dct", "data-fft.pkl"))
 
 my_times = []
@@ -74,6 +87,8 @@ for i in range(4, 12):
 
 for i in range(12,15):
     my_times.append(0)
+    
+    del a
     
 sns.set_theme(style="darkgrid")
 
