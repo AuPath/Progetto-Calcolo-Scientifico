@@ -6,6 +6,7 @@ from PyQt5.QtCore import (QObject, pyqtSignal)
 from PyQt5.QtWidgets import QProgressBar
 from scipy.fft import dct
 from scipy.fft import idct
+import os
 
 
 class Worker(QObject):
@@ -13,17 +14,23 @@ class Worker(QObject):
     progress = pyqtSignal(int)
     out_path = pyqtSignal(str)
 
-    def __init__(self, progress_bar: QProgressBar, img_path, f, d):
+    def __init__(self, progress_bar: QProgressBar, img_path, out_dir, f, d):
         super(Worker, self).__init__()
-        self.img_path = img_path
+        self.img_path = img_path.strip()
+        self.out_dir = out_dir.strip()
         self.f = int(f)
         self.d = int(d)
         self.progress_bar = progress_bar
 
     def run(self):
         img = Image.fromarray(self.pseudo_jpeg(self.img_path, self.f, self.d))
-        cmpr_img_path = self.img_path.replace(".bmp", "-compressed-{f}-{d}.bmp".format(f=self.f,d=self.d))
-        img.save(cmpr_img_path)
+        cmpr_img_path = self.img_path.replace(".bmp", "-compressed-{f}-{d}.bmp".format(f=self.f, d=self.d))
+
+        out_path = cmpr_img_path
+        if self.out_dir:
+            filename = os.path.split(cmpr_img_path)[-1]
+            out_path = os.path.join(self.out_dir, filename)
+        img.save(out_path)
         self.out_path.emit(cmpr_img_path)
         self.finished.emit()
 
