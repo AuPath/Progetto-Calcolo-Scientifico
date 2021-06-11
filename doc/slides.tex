@@ -396,19 +396,25 @@ Scipt per il calcolo delle soluzione utilizzando le diverse librerie.
 \subsection{Custom DCT2}
 
 \begin{frame}
-\frametitle{Algoritmo usato}
-Per il calcolo della FFT utilizziamo la funzione scipy.fft della libreria scipy. Le matrici vengono create con numpy di dimensione $2^i$ con $1\leq i \leq 12$.\\
-Questo è utile per motivi di visualizzazione del tempo di esecuzione, infatti per quanto riguarda il costo computazionale:
-\begin{itemize}
-	\item DCT (implementata da noi): $O(n^3)$
-	\item FFT (scipy.fft): $O(n^2log(n))$
-\end{itemize}
-Andando a plottare il tempo di esecuzione in secondi al variare della dimensione delle matrici $2^i$ con $i$ screscente, riportando le ascisse su scala logaritmica si ha:\\
-\begin{itemize}
-	\item DCT: $O(n^3) \Rightarrow log((2^i)^3) =  log(2^{3i}) = 3i $
-	\item FFT: $O(n^2log(n)) \Rightarrow log((2^i)^2 log(2^i)) =  log(2^{2i}) + log(i) = 2i + log(i) \approx 2i$
-\end{itemize}
-Ci aspettiamo quindi che il plot risulti in due rette (circa) con coefficiente angolare diverso (pi\'u alto DCT pi\'u basso FFT) .
+	\frametitle{Multiple Columns}
+	\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+		
+		\column{.5\textwidth} 
+		Qui parliamo velocemente della FFT
+		\begin{enumerate}
+			\item Utilizziamo numpy.fft
+			\item Implementazione sottostante scritta in linguaccio C.
+			\item Costo computazionale: $O(n^2log(n))$
+		\end{enumerate}
+		
+		\column{.5\textwidth} 
+		Qui parliamo velocemente della Custom DCT
+		\begin{enumerate}
+			\item Implementata da noi in python
+			\item Non viene utilizzato un linguaggio a basso livello, risulta essere più lenta ma emerge comunque il comportamento asintotico
+			\item Costo computazionale: $O(n^3)$
+		\end{enumerate}
+	\end{columns}
 \end{frame}
 
 \begin{frame}
@@ -434,8 +440,54 @@ Ci aspettiamo quindi che il plot risulti in due rette (circa) con coefficiente a
 \end{frame}
 
 \begin{frame}
+	\frametitle{Confronto tra Custom DCT2 e FFT}
+	Per il calcolo della FFT utilizziamo la funzione scipy.fft della libreria scipy. Le matrici vengono create con numpy di dimensione $2^i$ con $1\leq i \leq 12$.\\
+	Questo è utile per motivi di visualizzazione del tempo di esecuzione, infatti per quanto riguarda il costo computazionale:
+	\begin{itemize}
+		\item DCT (implementata da noi): $O(n^3)$
+		\item FFT (scipy.fft): $O(n^2log(n))$
+	\end{itemize}
+	Andando a plottare il tempo di esecuzione in secondi al variare della dimensione delle matrici $2^i$ con $i$ screscente, riportando le ascisse su scala logaritmica si ha:\\
+	\begin{itemize}
+		\item DCT: $O(n^3) \Rightarrow log((2^i)^3) =  log(2^{3i}) = 3i $
+		\item FFT: $O(n^2log(n)) \Rightarrow log((2^i)^2 log(2^i)) =  log(2^{2i}) + log(i) = 2i + log(i) \approx 2i$
+	\end{itemize}
+	Ci aspettiamo quindi che il plot risulti in due rette (circa) con coefficiente angolare diverso (pi\'u alto DCT pi\'u basso FFT) .
+\end{frame}
+
+
+\begin{frame}
 \frametitle{Confronto tra Custom DCT2 e FFT}
-grafici - la dct \'e $O(N^3)$, la FFT \'e $O(N^2)$
+
+	\begin{figure}
+		\includegraphics[width=1\textheight]{assets/dct2.png}
+		\caption{Tempi di esecuzione DCT e FFT.}
+		\label{fig:dct2}
+	\end{figure}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Confronto tra Custom DCT2 e FFT}
+	\begin{itemize}
+		\item Analisi retta di regressione:
+		\begin{itemize}
+					\item \textbf{Coefficiente angolare }retta di regressione \textbf{custom DCT}: $0.8910$
+					\item \textbf{Coefficiente angolare }retta di regressione \textbf{numpy FFT}: $0.6655$
+					\begin{itemize}
+						\item Vengono esclusi i tempi di calcolo per matrici troppo piccole, così da far emergere il comportamento asintotico dell'algoritmo e quindi il costo computazionale.
+					\end{itemize}
+					\item Da cui: FFT impiega il $74\%$ del tempo rispetto alla DCT.
+		\end{itemize}
+	\item Retta di regressione teorica:
+	\begin{itemize}
+		\item Custom DCT: $3i$
+		\item Numpy FFT: $2i$
+		\item Da cui: FFT impiega il $66\%$ del tempo impegato dalla DCT.
+	\end{itemize}
+	\item I risultati teorici e sperimentali sono coerenti tra loro, tuttavia non considerando il contributo del logaritmo nella FFT le proporzioni vengono leggermente distorte.
+	\end{itemize}
+	
 \end{frame}
 
 \subsection{Custom JPEG}
@@ -599,114 +651,19 @@ grafici - la dct \'e $O(N^3)$, la FFT \'e $O(N^2)$
 	\end{figure}	
 \end{frame}
 
+\subsection{Live demo}
 \begin{frame}
-\frametitle{Sperimentazione}
-Momento della presentazione in cui facciamo girare il nostro programma
+\frametitle{Live demo}
+Esecuzione live del programma realizzato.
 \end{frame}
 
 \begin{frame}
 \frametitle{listato}
 \end{frame}
 
-%-----------------------------------------------
-% ESEMPI
 
 \begin{frame}
-\frametitle{Blocks of Highlighted Text}
-\begin{block}{Block 1}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-\end{block}
-
-\begin{block}{Block 2}
-Pellentesque sed tellus purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum quis magna at risus dictum tempor eu vitae velit.
-\end{block}
-
-\begin{block}{Block 3}
-Suspendisse tincidunt sagittis gravida. Curabitur condimentum, enim sed venenatis rutrum, ipsum neque consectetur orci, sed blandit justo nisi ac lacus.
-\end{block}
+\Huge{\centerline{Grazie per l'attenzione fra'}}
 \end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{Multiple Columns}
-\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
-
-\column{.45\textwidth} % Left column and width
-\textbf{Heading}
-\begin{enumerate}
-\item Statement
-\item Explanation
-\item Example
-\end{enumerate}
-
-\column{.5\textwidth} % Right column and width
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-
-\end{columns}
-\end{frame}
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Verbatim}
-\begin{example}[Theorem Slide Code]
-\begin{verbatim}
-\begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
-\end{frame}\end{verbatim}
-\end{example}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{Figure}
-Uncomment the code on this slide to include your own image from the same directory as the template .TeX file.
-%\begin{figure}
-%\includegraphics[width=0.8\linewidth]{test}
-%\end{figure}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Citation}
-An example of the \verb|\cite| command to cite within the presentation:\\~
-
-This statement requires citation \cite{p1}.
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{References}
-\footnotesize{
-\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
-\bibitem[Smith, 2012]{p1} John Smith (2012)
-\newblock Title of the publication
-\newblock \emph{Journal Name} 12(3), 45 -- 678.
-\end{thebibliography}
-}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\Huge{\centerline{Grazie per l'attenzione}}
-\end{frame}
-
-%----------------------------------------------------------------------------------------
 
 \end{document}
