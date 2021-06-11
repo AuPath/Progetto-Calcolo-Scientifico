@@ -44,7 +44,8 @@ type = []
 for i in range(1, 11):
     print("RUN " + str(i) + " DI 10")
     # piu di 14 e' troppo
-    for j in range(4, 15):
+
+    for j in range(2, 15):
         print("fft " + str(j) + " di 14")
         dim.append(j)
         run.append(i)
@@ -58,13 +59,11 @@ for i in range(1, 11):
         lib_times.append(lib_tf - lib_ti)
 
         del a
-
-        if j == 14:
-            print('-' * 15 + " FINE FFT " + '-' * 15)
+        time.sleep(0.1)
 
     print('-' * 15 + " FINE ROUND " + str(i) + " " + '-' * 15)
-    if i == 10:
-        print('-' * 15 + " FINE " + '-' * 15)
+
+print('-' * 15 + " FINE " + '-' * 15)
 
 data = pd.DataFrame({'Run': run, 'Time': lib_times, 'Dimension': dim, 'Type': type})
 data.to_pickle(os.path.join(".", "out-dct", "data-fft.pkl"))
@@ -95,3 +94,8 @@ sns.set_theme(style="darkgrid")
 data = pd.DataFrame(my_times, columns=['HomeMade DCT'])
 data.to_pickle(os.path.join(".", "out-dct", "data-dct-homemade.pkl"))
 '''
+
+dct_df = pd.read_pickle(os.path.join(".", "out-dct", "data-dct-homemade.pkl"))
+fft_df = pd.read_pickle(os.path.join(".", "out-dct", "data-fft.pkl"))
+df_out = pd.concat([dct_df, fft_df])
+df_out.to_pickle(os.path.join(".", "out-dct", "data-result.pkl"))
