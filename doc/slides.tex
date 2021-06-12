@@ -287,16 +287,49 @@ Il metodo standard per la risoluzione diretta di sistemi lineari non \'e ottimiz
 \frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
 \textit{numpy} e \textit{scipy} \'e documentato peggio di Matlab ma meglio di Octave: ci sono molti esempi ed \'e disponibile il codice essendo open source, anche non essendo presente una buona spiegazione del workflow come in Matlab, si pu\'o capire leggendo il codice; la documentazione si trova alla pagina \url{https://www.scipy.org/docs.html}.\\ \textit{sciki-sparse} non ha una documentazione chiara, ma anche in questo caso, essendo open source, \'e possibile leggere direttamente il codice; la documentazione si trova alla pagina \url{https://scikit-sparse.readthedocs.io/en/latest/cholmod.html}.
 \end{frame}
+
 \begin{frame}
 \frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
 \textbf{Memorizzazione di matrici sparse}: \textit{numpy} salva le matrici sparse come Matlab.\\
-\textbf{Risoluzione di $Ax = b$}: il risolutore assume che la soluzione $x$ sia sparsa, perch\'e pu\'o capitare spesso; se invece $x$ \'e densa, la costruzione risulta molto pi\'u costosa. Utilizza sempre la fattorizzazione LU per risolvere il sistema, quindi il suo comportamento non \'e differente nel caso di matrici simmetriche e definite positive, perch\'e non utilizza mai Cholesky; per questo motivo abbiamo introdotto la libreria \textit{scikit-sparse}, che permette di applicare Cholesky a grandi matrici sparse, perci\'o abbiamo potuto adattare l'algoritmo scritto in Python ai casi di matrici simmetriche e definite positive.
+\textbf{Risoluzione di $Ax = b$}: scipy sfrutta il pacchetto \textit{UMFPACK}, un insieme di routines scritte in c per risolvere sistemi lineare sparsi. Per questo pacchetto è dipsonibile la documentazione\footnote{\url{https://fossies.org/linux/SuiteSparse/UMFPACK/Doc/UMFPACK_UserGuide.pdf}}
+in cui viene spiegato il processo utilizzato per risolvere il sistema sparso. Il risolutore assume che la soluzione $x$ sia sparsa, perch\'e pu\'o capitare spesso; se invece $x$ \'e densa, la costruzione risulta molto pi\'u costosa. Utilizza sempre la fattorizzazione LU per risolvere il sistema, quindi il suo comportamento non \'e differente nel caso di matrici simmetriche e definite positive, perch\'e non utilizza mai Cholesky, questo permette di rimanere il pi\'u generale possibile ma si paga in efficienza.
+Per questo motivo abbiamo introdotto la libreria \textit{scikit-sparse}, che permette di applicare Cholesky a grandi matrici sparse, perci\'o abbiamo potuto adattare l'algoritmo scritto in Python ai casi di matrici simmetriche e definite positive.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
+	\textbf{Memorizzazione di matrici sparse}: \textit{numpy} salva le matrici sparse come Matlab.\\
+	\textbf{Risoluzione di $Ax = b$}:
+	\begin{itemize}
+		\item \textit{scipy} si appoggia completamente sul pacchetto opensoruce \textit{UMFPACK}, un insieme di routines scritte in C per risolvere sistemi lineare sparsi.
+
+		\item La documentazione\footnote{\url{https://fossies.org/linux/SuiteSparse/UMFPACK/Doc/UMFPACK_UserGuide.pdf}} di \textit{UMFPACK} è completa, riporta il codice C con relativa spiegazione delle varie routines. Qui viene chiaramente spiegato il processo di risoluzione per sistemi lineari sparsi.
+
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
+	\begin{itemize}
+		\item Il risolutore assume che la soluzione $x$ sia sparsa, perch\'e pu\'o capitare spesso; se invece $x$ \'e densa, la costruzione risulta molto pi\'u costosa
+		\item Utilizza sempre la fattorizzazione LU per risolvere il sistema, quindi il suo comportamento non \'e differente nel caso di matrici simmetriche e definite positive, perch\'e non utilizza mai Cholesky, questo permette di rimanere il pi\'u generale possibile ma si paga in efficienza.
+		\item 	Per questo motivo abbiamo introdotto la libreria \textit{scikit-sparse}, che permette di applicare Cholesky a grandi matrici sparse, perci\'o abbiamo potuto adattare l'algoritmo scritto in Python ai casi di matrici simmetriche e definite positive.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Nuovo workflow con \textit{scikit-sparse}}
-Poich\'e \textit{numpy} e \textit{scipy} utilizzano sempre la fattorizzazione LU per risolvere i sistemi lineari, abbiamo preso spunto da Matlab aggiungendo il controllo con Cholesky.\\
-Il nuovo codice in Python fa uso della libreria \textit{scikit-sparse} per calcolare la fattorizzazione di Cholesky della matrice $A$ presa in input; nel caso $A$ sia simmetrica e definita positiva, calcoliamo la soluzione grazie alla fattorizzazione $A = RR^T$, altrimenti viene lanciata un'eccezione, quindi calcoliamo la soluzione come nell'algoritmo precedente, utilizzando la fattorizzazione LU.
+
+
+\begin{itemize}
+	\item Poich\'e \textit{scipy} utilizza sempre e solo la fattorizzazione LU per risolvere i sitemi lineari, abbiamo voluto introdurre un workflow simile a Matlab sfruttando la fattorizzazione con Cholesky.
+	
+	\item \textit{scipi} non permette di utilizzare Cholesky su matrici sparse, quindi abbiamo introdotto la libreria \textit{scikit-sparse} proprio a questo scopo.
+	
+	\item Il nuovo codice in Python fa uso della libreria \textit{scikit-sparse} per calcolare la fattorizzazione di Cholesky della matrice $A$ presa in input; nel caso $A$ sia simmetrica e definita positiva, calcoliamo la soluzione grazie alla fattorizzazione $A = RR^T$, altrimenti viene lanciata e gestita un'eccezione, quindi calcoliamo la soluzione come nell'algoritmo precedente, utilizzando la fattorizzazione LU.
+\end{itemize}
+
+
 \end{frame}
 
 %------------------------------------------------
@@ -488,37 +521,6 @@ Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocit
 		\item I risultati teorici e sperimentali sono coerenti tra loro, tuttavia non considerando il contributo del logaritmo nella FFT le proporzioni vengono leggermente distorte.
 	\end{itemize}
 \end{frame}
-
-
-\begin{frame}
-	\frametitle{Confronto tra Custom DCT2 e FFT}
-	\begin{tabular}{cc|cc}
-		\firsthline
-		\multicolumn{2}{c}{Item} & \multicolumn{2}{c}{Casa} \\	
-		\hline
-		\hline
-		m    & q & m & q  \\
-		\hline
-		1 & 2 & 3&6\\
-		1 & 2 & 3&6\\
-		\lasthline
-	\end{tabular}
-
-	\begin{tabular}{cc|cc}
-		\firsthline
-		\multicolumn{2}{c}{Item} & \multicolumn{2}{c}{Casa} \\	
-		\hline
-		\hline
-		m    & q & m & q  \\
-		\hline
-		1 & 2 & 3&6\\
-		1 & 2 & 3&6\\
-		\lasthline
-	\end{tabular}
-	
-	
-\end{frame}
-
 
 \subsection{Custom JPEG}
 
