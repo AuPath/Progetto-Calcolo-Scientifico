@@ -82,6 +82,8 @@
 \usepackage{textcomp}
 \usepackage{listings}
 \usepackage{xcolor}
+
+\usepackage{array} 
 \usepackage{hyperref}
 
 \definecolor{commentsColor}{rgb}{0.497495, 0.497587, 0.497464}
@@ -429,8 +431,8 @@ Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocit
 	Per il calcolo della FFT utilizziamo la funzione \textit{numpy.fft.fft}. Le matrici vengono create di dimensione $2^i$ con $1\leq i \leq 14$ e gestite con \textit{numpy}. Questo è utile per motivi di visualizzazione del tempo di esecuzione, infatti i costi computazionali sono $O(n^3)$ per la Custom DCT e $O(n^2log(n))$ per la FFT.\\
 	Plottando il tempo di esecuzione in secondi al variare della dimensione delle matrici $n = 2^i$ con $i$ crescente, e riportando le ascisse su scala logaritmica si ottiene:\\
 	\begin{itemize}
-		\item DCT: $O(n^3) \Rightarrow log((2^i)^3) =  log(2^{3i}) = 3i $
-		\item FFT: $O(n^2log(n)) \Rightarrow log((2^i)^2 log(2^i)) =  log(2^{2i}) + log(i) = 2i + log(i) \approx 2i$
+		\item DCT: $O(n^3) \Rightarrow log_2((2^i)^3) =  log_2(2^{3i}) = 3i $
+		\item FFT: $O(n^2log(n)) \Rightarrow log_2((2^i)^2 log_2(2^i)) =  log_2(2^{2i}) + log_2(i) = 2i + log_2(i) \approx 2i$
 	\end{itemize}
 	Ci aspettiamo quindi che il plot sia composto da due rette con coefficiente angolare (circa) diverso (pi\'u alto DCT pi\'u basso FFT) .
 \end{frame}
@@ -450,25 +452,73 @@ Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocit
 \begin{frame}
 	\frametitle{Confronto tra Custom DCT2 e FFT}
 	\begin{itemize}
-		\item Analisi retta di regressione:
+		\item Analisi retta di regressione:\\
+		\begin{center}
+
+			\begin{tabular}{cc|cc}
+				\firsthline
+				\multicolumn{2}{c}{\textbf{Custom DCT}} & \multicolumn{2}{c}{\textbf{Numpy FFT}*} \\	
+				\hline
+				\hline
+				$m$    & $q$ & $m$ & $q$  \\
+				\hline
+				$2.959$ & $-19.587$ & $2.209$&  $-26.693$\\
+				\lasthline
+			\end{tabular}
+	
+		\end{center}
+
 		\begin{itemize}
-					\item \textbf{Coefficiente angolare }retta di regressione \textbf{custom DCT}: $0.8910$
-					\item \textbf{Coefficiente angolare }retta di regressione \textbf{numpy FFT}: $0.6655$
-					\begin{itemize}
-						\item Vengono esclusi i tempi di calcolo per matrici troppo piccole, così da far emergere il comportamento asintotico dell'algoritmo e quindi il costo computazionale.
-					\end{itemize}
-					\item Da cui: FFT impiega il $74\%$ del tempo rispetto alla DCT.
+			\item \textbf{Da cui}: FFT impiega il $74\%$ del tempo impegato alla DCT
+			\item L'intercetta della FFT di numpy è minore rispetto alla custom DCT in quanto viene utilizzato un linguaggio a basso livello (il costo computazionale non cambia).
+		\item (*) Vengono esclusi i tempi di calcolo per matrici troppo piccole, così da far emergere il comportamento asintotico dell'algoritmo e quindi il costo computazionale
 		\end{itemize}
-	\item Retta di regressione teorica:
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Confronto tra Custom DCT2 e FFT}
 	\begin{itemize}
-		\item Custom DCT: $3i$
-		\item Numpy FFT: $2i$
-		\item Da cui: FFT impiega il $66\%$ del tempo impegato dalla DCT.
+		\item Comportamento asintotico teorico:
+		\begin{itemize}
+			\item Custom DCT: $3i$ (vs. $2.959$)
+			\item Numpy FFT: $2i$ (vs. $2.209$)
+			\item \textbf{Da cui}: FFT impiega il $66\%$ (vs. $74\%$) del tempo impegato dalla DCT.
+		\end{itemize}
+		\item I risultati teorici e sperimentali sono coerenti tra loro, tuttavia non considerando il contributo del logaritmo nella FFT le proporzioni vengono leggermente distorte.
 	\end{itemize}
-	\item I risultati teorici e sperimentali sono coerenti tra loro, tuttavia non considerando il contributo del logaritmo nella FFT le proporzioni vengono leggermente distorte.
-	\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Confronto tra Custom DCT2 e FFT}
+	\begin{tabular}{cc|cc}
+		\firsthline
+		\multicolumn{2}{c}{Item} & \multicolumn{2}{c}{Casa} \\	
+		\hline
+		\hline
+		m    & q & m & q  \\
+		\hline
+		1 & 2 & 3&6\\
+		1 & 2 & 3&6\\
+		\lasthline
+	\end{tabular}
+
+	\begin{tabular}{cc|cc}
+		\firsthline
+		\multicolumn{2}{c}{Item} & \multicolumn{2}{c}{Casa} \\	
+		\hline
+		\hline
+		m    & q & m & q  \\
+		\hline
+		1 & 2 & 3&6\\
+		1 & 2 & 3&6\\
+		\lasthline
+	\end{tabular}
+	
 	
 \end{frame}
+
 
 \subsection{Custom JPEG}
 
@@ -476,14 +526,16 @@ Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocit
 \frametitle{Passi dell'algoritmo}
 \begin{small}
 INPUT: immagine, \textbf{f} dimensione dei blocchetti, \textbf{d} soglia di taglio delle frequenze
-\begin{itemize}
+\begin{enumerate}
 \item Inizializza una matrice con i valori dell'immagine bitmap e una matrice di zeri
 \item Calcola il numero di blocchetti per righe e per colonne data la dimensione dei blocchetti \textbf{f}
 \item Ad ogni blocchetto applica la DCT2 (della libreria \textit{scipy.fft})
 \item Per ogni blocchetto taglia le frequenze alte data la soglia \textbf{d}
 \item Ad ogni blocchetto applica la IDCT2 (della libreria \textit{scipy.fft})
-\item Arrotonda i numeri e li aggiusta nell'intervallo $\{0,...,255\}$
-\end{itemize}
+\item Arrotonda i numeri e li mappa nell'intervallo $[0, 255]$
+\end{enumerate}
+
+OUTPUT: immagine compressa
 \end{small}
 \end{frame}
 
