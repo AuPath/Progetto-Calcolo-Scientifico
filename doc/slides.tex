@@ -195,7 +195,7 @@ University of Milano Bicocca \\ % Your institution for the title page
 			\item scikit-sparse 0.4.4
 		\end{itemize}
 	\end{itemize}
-	N.B.: Per entrambi i sistemi operativi \'e stata utilizzata la stessa versione di libreria in modo da avere risultati conmparabili.
+	N.B.: Per entrambi i sistemi operativi \'e stata utilizzata la stessa versione di libreria in modo da avere risultati comparabili.
 \end{frame}
 
 
@@ -223,7 +223,7 @@ University of Milano Bicocca \\ % Your institution for the title page
 		\item 10 iterazioni per il calcolo delle misure (in modo tale da avere risultati statisticamente validi)
 	
 		\begin{itemize}
-			\item Scirpt python con funzione di wrapper per profilare la memoria utilizzata.
+			\item Script Python con funzione di \textit{wrapper} per profilare la memoria utilizzata.
 			\begin{enumerate}
 				\item Run di ogni script per ogni matrice su ogni sistema operativo.
 
@@ -391,68 +391,54 @@ Scipt per il calcolo delle soluzione utilizzando le diverse librerie.
 	\lstinputlisting[language=Python, firstline=9, basicstyle=\tiny]{../src/python_solver_optimized.py}
 \end{frame}
 
-\section{JPEG}
+\section{Compressione di immagini tramite DCT}
 
 \subsection{Custom DCT2}
 
 \begin{frame}
-	\frametitle{Multiple Columns}
-	\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
-		
-		\column{.5\textwidth} 
-		Qui parliamo velocemente della FFT
-		\begin{enumerate}
-			\item Utilizziamo numpy.fft
-			\item Implementazione sottostante scritta in linguaccio C.
-			\item Costo computazionale: $O(n^2log(n))$
-		\end{enumerate}
-		
-		\column{.5\textwidth} 
-		Qui parliamo velocemente della Custom DCT
-		\begin{enumerate}
-			\item Implementata da noi in python
-			\item Non viene utilizzato un linguaggio a basso livello, risulta essere più lenta ma emerge comunque il comportamento asintotico
-			\item Costo computazionale: $O(n^3)$
-		\end{enumerate}
-	\end{columns}
+\frametitle{Implementazioni - FFT}
+\begin{enumerate}
+\item La FFT \'e un modo per calcolare la trasformata discreta di Fourier in modo efficiente, facendo uso di simmetrie; a differenza della DCT, la DFT usa anche numeri complessi. \'E definita cos\'i:
+\[c_k = \sum\limits_{j = 1}^N v_j e^{-2 \pi i \frac{kj}{N}} \;\;\;\; k = 0,...,N-1\]
+\item Utilizziamo \textit{numpy.fft}, la cui implementazione sottostante \'e scritta in linguaccio C.
+\item Costo computazionale: $O(n^2log(n))$
+\end{enumerate}
+\end{frame}
+\begin{frame}
+\frametitle{Implementazioni - Custom DCT}
+\textbf{FFT}
+\begin{enumerate}
+\item Implementata da noi in Python, applicando la DCT scalata alla matrice prima per righe e poi per colonne:
+\[c_k = \frac{1}{\sqrt{\alpha_k}} \sum\limits_{j=1}^N \cos(\pi k \frac{2j - 1}{2N}) v_j \;\;\;\; k = 0,...,N-1\]
+\item Non viene utilizzato un linguaggio a basso livello, risulta essere più lenta ma emerge comunque il comportamento asintotico
+\item Costo computazionale: $O(n^3)$
+\end{enumerate}
 \end{frame}
 
 \begin{frame}
 \frametitle{Algoritmo}
-	\lstinputlisting[language=Python, firstline=21, lastline=34]{../src/latex_dct2.py}
+	\lstinputlisting[language=Python, firstline=20, lastline=33]{../src/latex_dct2.py}
 \end{frame}
 
 \begin{frame}
 \frametitle{Algoritmo}
-	\lstinputlisting[language=Python, firstline=7, lastline=16]{../src/latex_dct2.py}
+	\lstinputlisting[language=Python, firstline=6, lastline=15]{../src/latex_dct2.py}
 \end{frame}
 
 \begin{frame}
 \frametitle{Algoritmo}
-	\lstinputlisting[language=Python, firstline=37, lastline=52]{../src/latex_dct2.py}
-\end{frame}
-
-\begin{frame}
-\frametitle{Notizie su scipy.fft}
-\url{docs.scipy.org/doc/scipy/reference/generated/scipy.fftpack.dct.html}\\
-	For a single dimension array x, dct(x, norm='ortho') is equal to MATLAB dct(x). Ma \'e fft? Mi sa di no, provare fft
-	 \url{docs.scipy.org/doc/scipy/reference/tutorial/fft.html}
+	\lstinputlisting[language=Python, firstline=36, lastline=51]{../src/latex_dct2.py}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Confronto tra Custom DCT2 e FFT}
-	Per il calcolo della FFT utilizziamo la funzione scipy.fft della libreria scipy. Le matrici vengono create con numpy di dimensione $2^i$ con $1\leq i \leq 12$.\\
-	Questo è utile per motivi di visualizzazione del tempo di esecuzione, infatti per quanto riguarda il costo computazionale:
-	\begin{itemize}
-		\item DCT (implementata da noi): $O(n^3)$
-		\item FFT (scipy.fft): $O(n^2log(n))$
-	\end{itemize}
-	Andando a plottare il tempo di esecuzione in secondi al variare della dimensione delle matrici $2^i$ con $i$ screscente, riportando le ascisse su scala logaritmica si ha:\\
+	Per il calcolo della FFT utilizziamo la funzione \textit{numpy.fft.fft}. Le matrici vengono create di dimensione $2^i$ con $1\leq i \leq 14$ e gestite con \textit{numpy}. Questo è utile per motivi di visualizzazione del tempo di esecuzione, infatti i costi computazionali sono $O(n^3)$ per la Custom DCT e $O(n^2log(n))$ per la FFT.\\
+	Plottando il tempo di esecuzione in secondi al variare della dimensione delle matrici $n = 2^i$ con $i$ crescente, e riportando le ascisse su scala logaritmica si ottiene:\\
 	\begin{itemize}
 		\item DCT: $O(n^3) \Rightarrow log((2^i)^3) =  log(2^{3i}) = 3i $
 		\item FFT: $O(n^2log(n)) \Rightarrow log((2^i)^2 log(2^i)) =  log(2^{2i}) + log(i) = 2i + log(i) \approx 2i$
 	\end{itemize}
-	Ci aspettiamo quindi che il plot risulti in due rette (circa) con coefficiente angolare diverso (pi\'u alto DCT pi\'u basso FFT) .
+	Ci aspettiamo quindi che il plot sia composto da due rette con coefficiente angolare (circa) diverso (pi\'u alto DCT pi\'u basso FFT) .
 \end{frame}
 
 
@@ -493,6 +479,21 @@ Scipt per il calcolo delle soluzione utilizzando le diverse librerie.
 \subsection{Custom JPEG}
 
 \begin{frame}
+\frametitle{Passi dell'algoritmo}
+\begin{small}
+INPUT: immagine, \textbf{f} dimensione dei blocchetti, \textbf{d} soglia di taglio delle frequenze
+\begin{itemize}
+\item Inizializza una matrice con i valori dell'immagine bitmap e una matrice di zeri
+\item Calcola il numero di blocchetti per righe e per colonne data la dimensione dei blocchetti \textbf{f}
+\item Ad ogni blocchetto applica la DCT2 (della libreria \textit{scipy.fft})
+\item Per ogni blocchetto taglia le frequenze alte data la soglia \textbf{d}
+\item Ad ogni blocchetto applica la IDCT2 (della libreria \textit{scipy.fft})
+\item Arrotonda i numeri e li aggiusta nell'intervallo $\{0,...,255\}$
+\end{itemize}
+\end{small}
+\end{frame}
+
+\begin{frame}
 \frametitle{Algoritmo}
 \lstinputlisting[language=Python, firstline=1, lastline=5]{../src/latex_pseudo_jpeg.py}
 \lstinputlisting[language=Python, firstline=7, lastline=13]{../src/latex_pseudo_jpeg.py}
@@ -518,6 +519,8 @@ Scipt per il calcolo delle soluzione utilizzando le diverse librerie.
 	\frametitle{Algoritmo}
 	\lstinputlisting[language=Python, firstline=39, lastline=49, basicstyle=\tiny]{../src/latex_pseudo_jpeg.py}
 \end{frame}
+
+\subsection{Esempi}
 
 \begin{frame}
 \frametitle{Esempi con le immagini proposte}
@@ -657,13 +660,9 @@ Scipt per il calcolo delle soluzione utilizzando le diverse librerie.
 Esecuzione live del programma realizzato.
 \end{frame}
 
+\section*{}
 \begin{frame}
-\frametitle{listato}
-\end{frame}
-
-
-\begin{frame}
-\Huge{\centerline{Grazie per l'attenzione fra'}}
+\Huge{\centerline{Grazie per l'attenzione}}
 \end{frame}
 
 \end{document}

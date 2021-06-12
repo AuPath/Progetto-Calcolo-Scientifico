@@ -1,5 +1,4 @@
-import numpy as np
-from scipy.fft import dct
+import numpy as numpy
 import time
 import math
 
@@ -7,7 +6,7 @@ import math
 def dct2_personal(a):
     n = len(a)  # rows
     m = len(a[0])  # columns
-    c = np.zeros((n, m))  # result matrix
+    c = numpy.zeros((n, m))  # result matrix
     # dct by rows
     for i in range(n):
         c[i] = dct_personal(a[i])  # i-th row
@@ -20,7 +19,7 @@ def dct2_personal(a):
 
 def dct_personal(v):
     n = len(v)
-    c = np.zeros(n)
+    c = numpy.zeros(n)
     for k in range(n):
         if k == 0:
             alpha = n
@@ -39,10 +38,10 @@ my_times = []
 
 for i in range(4, 12):
     N = 2 ** i
-    a = np.random.rand(N, N)
+    a = numpy.random.rand(N, N)
 
     lib_ti = time.time()
-    lib_dct = dct(dct(a, axis=1, norm="ortho"), axis=0, norm="ortho")
+    lib_dct = numpy.fft.fft(numpy.fft.fft(a, axis=1, norm="ortho"), axis=0, norm="ortho")
     lib_tf = time.time()
     lib_times.append(lib_tf - lib_ti)
 
