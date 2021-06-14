@@ -1,8 +1,8 @@
 import math
 import numpy as np
 from PIL import Image
-from scipy.fft import dct
-from scipy.fft import idct
+from numpy.fft import fft
+from numpy.fft import ifft
 
 ## fissa un range di valori possibili per n
 def clamp(self, n, smallest, largest):
@@ -27,7 +27,7 @@ def pseudo_jpeg(self, img_path, f, d):
             ## Applicazione DCT2
             ## Slice della matrice fxf
             block = img_mat[i * f: (i + 1) * f, j * f: (j + 1) * f]
-            block = dct(dct(block, axis=1, norm="ortho"),axis=0, norm="ortho")
+            block = fft(fft(block, axis=1, norm="ortho"),axis=0, norm="ortho").real
             
             ## Eliminazione elementi sotto diagonale
             block_rows, block_columns = block.shape
@@ -37,7 +37,7 @@ def pseudo_jpeg(self, img_path, f, d):
                         block[k, l] = 0
 
             ## Applicazione IDCT2
-            block = idct(idct(block, axis=1, norm="ortho"),axis=0, norm="ortho")
+            block = ifft(ifft(block, axis=1, norm="ortho"),axis=0, norm="ortho").real
 
             ## fix dei numeri
             for k in range(block.shape[0]):
