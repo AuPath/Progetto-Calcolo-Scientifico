@@ -23,7 +23,7 @@ try:
 except CholmodNotPositiveDefiniteError:
     # Eccezione: La matrice non e' definita positiva
     # Calcolo soluzione utilizzando fattorizzazione LU
-    x = spsolve(A, b, use_umfpack=False)
+    x = spsolve(A, b)
 elapsed = time.time() - start_time  # Tempo trascorso
 
 er = norm(xe - x) / norm(xe)        # Errore relativo
