@@ -4,8 +4,8 @@ import numpy as np
 from PIL import Image
 from PyQt5.QtCore import (QObject, pyqtSignal)
 from PyQt5.QtWidgets import QProgressBar
-from scipy.fft import dct
-from scipy.fft import idct
+from numpy.fft import fft
+from numpy.fft import ifft
 import os
 
 
@@ -31,7 +31,7 @@ class Worker(QObject):
             filename = os.path.split(cmpr_img_path)[-1]
             out_path = os.path.join(self.out_dir, filename)
         img.save(out_path)
-        self.out_path.emit(cmpr_img_path)
+        self.out_path.emit(out_path)
         self.finished.emit()
 
     ## fissa un range di valori possibili per n
@@ -62,7 +62,7 @@ class Worker(QObject):
                 ## a[0:8,0:3] 8 righe 3 colonne
 
                 block = img_mat[i * f: (i + 1) * f, j * f: (j + 1) * f]
-                block = dct(dct(block, axis=1, norm="ortho"), axis=0, norm="ortho")
+                block = fft(fft(block, axis=1, norm="ortho"), axis=0, norm="ortho")
 
                 ## eliminazione elementi sotto diagonale
 
@@ -72,7 +72,7 @@ class Worker(QObject):
                         if (k + l) >= d:
                             block[k, l] = 0  ## per eliminare la frequenza intende mettere a 0 ?
 
-                block = idct(idct(block, axis=1, norm="ortho"), axis=0, norm="ortho")
+                block = ifft(ifft(block, axis=1, norm="ortho"), axis=0, norm="ortho")
 
                 ## fix dei numeri
                 for k in range(block.shape[0]):
