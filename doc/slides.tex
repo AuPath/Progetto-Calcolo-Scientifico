@@ -206,9 +206,9 @@ University of Milano Bicocca \\ % Your institution for the title page
 	Per misurare le performance sono state utilizzate le seguenti metriche:
 	\begin{itemize}
 		\item Tempo di calcolo della soluzione
-		\item Picco memoria RAM utilizzata per risolvere il sistema
+		\item Picco di memoria RAM utilizzata per risolvere il sistema
 		\item Errore della soluzione: \[err \_ rel = \frac{\|x - xe\|_2}{\|xe\|_2}\]
-		con $\| \cdot \|$ la norma euclidea dei vettori
+		con $\| \cdot \|_2$ la norma euclidea dei vettori
 	\end{itemize}
 	\end{frame}
 
@@ -218,16 +218,16 @@ University of Milano Bicocca \\ % Your institution for the title page
 		\begin{enumerate}
 		\item Creazione dei 4 script per il calcolo della soluzione di una matrice
 		\begin{itemize}
-			\item INPUT: file matrice
+			\item INPUT: File matrice
 			\item OUTPUT: File di report
 		\end{itemize}
 
 		\item 10 iterazioni per il calcolo delle misure (in modo tale da avere risultati statisticamente validi)
 	
 		\begin{itemize}
-			\item Script Python con funzione di \textit{wrapper} per profilare la memoria utilizzata.
+			\item Script Python con funzione di \textit{wrapper} per profilare la memoria utilizzata
 			\begin{enumerate}
-				\item Run di ogni script per ogni matrice su ogni sistema operativo.
+				\item Run di ogni script per ogni matrice su ogni sistema operativo
 
 					\item Misurazione del tempo (si considera solo il tempo per il calcolo della soluzione)
 					\item Misurazione dell'errore 
@@ -254,46 +254,54 @@ University of Milano Bicocca \\ % Your institution for the title page
 \subsection{Analisi delle librerie}
 
 \begin{frame}	
-\frametitle{Matlab}
-Matlab \'e ben documentato alla pagina \url{it.mathworks.com/help/matlab}, con motore di ricerca ed esempi.\\
-\textbf{Memorizzazione di matrici sparse}: data una matrice sparsa, Matlab salva solo gli elementi diversi da 0 in una lista, insieme al numero di colonna e riga. 
-\end{frame}
+	\frametitle{Matlab}
+	Matlab \'e ben documentato\footnote{\url{it.mathworks.com/help/matlab}}, con motore di ricerca ed esempi.\\
+		\textbf{Memorizzazione di matrici sparse}: data una matrice sparsa, Matlab salva solo gli elementi diversi da 0 in una lista, insieme al numero di colonna e riga. 
+	\end{frame}
+
+
 \begin{frame}
 \frametitle{Matlab}
-\textbf{Risoluzione di $Ax = b$}: Matlab ha a disposizione tanti risolutori di sistemi, il cui uso dipende dalla forma della matrice $A$; pertanto, quando viene eseguito il comando $A \setminus b$ si fanno una serie di controlli su $A$, i casi presi in considerazione sono: matrice quadrata, triangolare, triangolare permutata, Hermitiana, Hessenberg superiore, la matrice ha la diagonale tutta positiva o tutta negativa, la matrice \'e simmetrica e definita positiva. In tutti questi casi viene usato un solutore diverso, ad esempio se la matrice \'e simmetrica e definita positiva si applica l'algoritmo di Cholesky.
+\textbf{Risoluzione di $Ax = b$}: 
+
+\begin{itemize}
+	\item Matlab utilizza risolutori diversi
+	\item Casi considerati: quadrata, triangolare, triangolare permutata, hermitiana, Hessenberg superiore, la diagonale tutta positiva o tutta negativa, simmetrica e definita positiva
+	\item Il risolutore addotato dipende dalla forma di $A$ (ad esempio utilizza Cholesky per matrici simmetriche e definite positive)
+\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Octave}
-Octave \'e documentato in modo scomodo rispetto a Matlab alla pagina \url{https://octave.org/doc/v6.2.0}, che \'e un semplice manuale. \\
-\textbf{Memorizzazione di matrici sparse}: usa il \textit{compressed column format}, ovvero salva solo gli elementi diversi da 0 con il proprio numero di riga, e per ogni colonna salva il numero di elementi diversi da 0 per quella colonna; pertanto al posto di una tripletta per ogni elemento diverso da 0, si salva una coppia e in pi\'u un numero per ogni colonna, ottimizzando la memorizzazione.
+Octave \'e documentato\footnote{\url{https://octave.org/doc/v6.2.0}} in modo scomodo rispetto a Matlab, con un semplice manuale. \\
+\textbf{Memorizzazione di matrici sparse}: usa il \textit{compressed column format}, ovvero 
+salva solo gli elementi diversi da 0 con il proprio numero di riga, e per ogni colonna salva il numero di elementi diversi da 0 per quella colonna; pertanto al posto di una tripletta per ogni elemento diverso da 0, si salva una coppia e in pi\'u un numero per ogni colonna, ottimizzando la memorizzazione.
 \end{frame} 
 \begin{frame}
 \frametitle{Octave}
-\textbf{Risoluzione di $Ax = b$}: si comporta allo stesso modo di Matlab, ovvero considera la forma della matrice $A$ per scegliere il risolutore adatto. Anche Octave, come Matlab, prova ad applicare Cholesky e se non riesce significa che la matrice non \'e definita positiva e/o simmetrica.
+\textbf{Risoluzione di $Ax = b$}:
+
+\begin{itemize}
+	\item Comportamento analogo a Matlab
+	\item Viene considerata la forma della matrice $A$ per scegliere il risolutore adatto
+	\item  Anche Octave, come Matlab, prova ad applicare Cholesky e se non riesce significa che la matrice non \'e definita positiva e/o simmetrica
+	
+\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
-Python è un linguaggio di programmazione general purpose. Abbiamo utilizzato 3 librerie apposite per il calcolo scientifico, ognuna con un compito diverso.
+Python è un linguaggio di programmazione general purpose. Abbiamo utilizzato 3 librerie apposite per il calcolo scientifico, tutte implementate in C e ognuna con un compito diverso.
 \begin{enumerate}
-\item \textit{numpy}: libreria utilizzata per leggere e gestire le matrice in memoria
+\item \textit{numpy}: libreria utilizzata per leggere e gestire le matrice in memoria e per il calcolo scientifico
 \item \textit{scipy}: libreria specifica per il calcolo scientifico. Utilizza metodi diretti per il calcolo della soluzione di un sistema.\\
-Il metodo standard per la risoluzione diretta di sistemi lineari non \'e ottimizzato come in Matlab o Octave, ovvero non divide i risolutori in base alla matrice. Supporta la fattorizzazione LU tuttavia non \'e abilitata di default; non supporta Cholesky su matrici sparse.
-\item \textit{scikit-sparse}: libreria che permette di applicare Cholsesky su matrici sparse; \'e implementata in c.
+Il metodo standard per la risoluzione diretta di sistemi lineari non \'e ottimizzato come in Matlab o Octave, ovvero non divide i risolutori in base alla matrice. Supporta la fattorizzazione LU che \'e abilitata di default; non supporta Cholesky su matrici sparse
+\item \textit{scikit-sparse}: libreria che permette di applicare Cholesky su matrici sparse
 \end{enumerate}
 \end{frame}
 \begin{frame}
 \frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
-\textit{numpy} e \textit{scipy} \'e documentato peggio di Matlab ma meglio di Octave: ci sono molti esempi ed \'e disponibile il codice essendo open source, anche non essendo presente una buona spiegazione del workflow come in Matlab, si pu\'o capire leggendo il codice; la documentazione si trova alla pagina \url{https://www.scipy.org/docs.html}.\\ \textit{sciki-sparse} non ha una documentazione chiara, ma anche in questo caso, essendo open source, \'e possibile leggere direttamente il codice; la documentazione si trova alla pagina \url{https://scikit-sparse.readthedocs.io/en/latest/cholmod.html}.
-\end{frame}
-
-\begin{frame}
-\frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
-\textbf{Memorizzazione di matrici sparse}: \textit{numpy} salva le matrici sparse come Matlab.\\
-\textbf{Risoluzione di $Ax = b$}: scipy sfrutta il pacchetto \textit{UMFPACK}, un insieme di routines scritte in c per risolvere sistemi lineare sparsi. Per questo pacchetto è dipsonibile la documentazione\footnote{\url{https://fossies.org/linux/SuiteSparse/UMFPACK/Doc/UMFPACK_UserGuide.pdf}}
-in cui viene spiegato il processo utilizzato per risolvere il sistema sparso. Il risolutore assume che la soluzione $x$ sia sparsa, perch\'e pu\'o capitare spesso; se invece $x$ \'e densa, la costruzione risulta molto pi\'u costosa. Utilizza sempre la fattorizzazione LU per risolvere il sistema, quindi il suo comportamento non \'e differente nel caso di matrici simmetriche e definite positive, perch\'e non utilizza mai Cholesky, questo permette di rimanere il pi\'u generale possibile ma si paga in efficienza.
-Per questo motivo abbiamo introdotto la libreria \textit{scikit-sparse}, che permette di applicare Cholesky a grandi matrici sparse, perci\'o abbiamo potuto adattare l'algoritmo scritto in Python ai casi di matrici simmetriche e definite positive.
+\textit{numpy} e \textit{scipy} sono documentate\footnote{\url{https://www.scipy.org/docs.html}} peggio di Matlab ma meglio di Octave: ci sono molti esempi ed \'e disponibile il codice essendo open source, anche non essendo presente una buona spiegazione del workflow come in Matlab, si pu\'o capire leggendo il codice; la documentazione.\\ \textit{sciki-sparse} non ha una documentazione\footnote{\url{https://scikit-sparse.readthedocs.io/en/latest/cholmod.html}} chiara, ma anche in questo caso, essendo open source, \'e possibile leggere direttamente il codice.
 \end{frame}
 
 \begin{frame}
@@ -301,9 +309,9 @@ Per questo motivo abbiamo introdotto la libreria \textit{scikit-sparse}, che per
 	\textbf{Memorizzazione di matrici sparse}: \textit{numpy} salva le matrici sparse come Matlab.\\
 	\textbf{Risoluzione di $Ax = b$}:
 	\begin{itemize}
-		\item \textit{scipy} si appoggia completamente sul pacchetto opensoruce \textit{UMFPACK}, un insieme di routines scritte in C per risolvere sistemi lineare sparsi.
+		\item \textit{scipy} si appoggia completamente sul pacchetto opensoruce \textit{UMFPACK}, un insieme di routines scritte in C per risolvere sistemi lineari sparsi
 
-		\item La documentazione\footnote{\url{https://fossies.org/linux/SuiteSparse/UMFPACK/Doc/UMFPACK_UserGuide.pdf}} di \textit{UMFPACK} è completa, riporta il codice C con relativa spiegazione delle varie routines. Qui viene chiaramente spiegato il processo di risoluzione per sistemi lineari sparsi.
+		\item La documentazione\footnote{\url{https://fossies.org/linux/SuiteSparse/UMFPACK/Doc/UMFPACK_UserGuide.pdf}} di \textit{UMFPACK} è completa, riporta il codice C con relativa spiegazione delle varie routines. Qui viene chiaramente spiegato il processo di risoluzione per sistemi lineari sparsi
 
 	\end{itemize}
 \end{frame}
@@ -312,8 +320,8 @@ Per questo motivo abbiamo introdotto la libreria \textit{scikit-sparse}, che per
 	\frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
 	\begin{itemize}
 		\item Il risolutore assume che la soluzione $x$ sia sparsa, perch\'e pu\'o capitare spesso; se invece $x$ \'e densa, la costruzione risulta molto pi\'u costosa
-		\item Utilizza sempre la fattorizzazione LU per risolvere il sistema, quindi il suo comportamento non \'e differente nel caso di matrici simmetriche e definite positive, perch\'e non utilizza mai Cholesky, questo permette di rimanere il pi\'u generale possibile ma si paga in efficienza.
-		\item 	Per questo motivo abbiamo introdotto la libreria \textit{scikit-sparse}, che permette di applicare Cholesky a grandi matrici sparse, perci\'o abbiamo potuto adattare l'algoritmo scritto in Python ai casi di matrici simmetriche e definite positive.
+		\item Utilizza sempre la fattorizzazione LU per risolvere il sistema, quindi il suo comportamento non \'e differente nel caso di matrici simmetriche e definite positive, perch\'e non utilizza mai Cholesky, questo permette di rimanere il pi\'u generale possibile ma si paga in efficienza
+		\item 	Per questo motivo abbiamo introdotto la libreria \textit{scikit-sparse}, che permette di applicare Cholesky a grandi matrici sparse, perci\'o abbiamo potuto adattare l'algoritmo scritto in Python ai casi di matrici simmetriche e definite positive
 	\end{itemize}
 \end{frame}
 
@@ -322,11 +330,11 @@ Per questo motivo abbiamo introdotto la libreria \textit{scikit-sparse}, che per
 
 
 \begin{itemize}
-	\item Poich\'e \textit{scipy} utilizza sempre e solo la fattorizzazione LU per risolvere i sitemi lineari, abbiamo voluto introdurre un workflow simile a Matlab sfruttando la fattorizzazione con Cholesky.
+	\item Poich\'e \textit{scipy} utilizza sempre e solo la fattorizzazione LU per risolvere i sitemi lineari, abbiamo voluto introdurre un workflow simile a Matlab sfruttando la fattorizzazione con Cholesky
 	
-	\item \textit{scipi} non permette di utilizzare Cholesky su matrici sparse, quindi abbiamo introdotto la libreria \textit{scikit-sparse} proprio a questo scopo.
+	\item \textit{scipy} non permette di utilizzare Cholesky su matrici sparse, quindi abbiamo introdotto la libreria \textit{scikit-sparse} proprio a questo scopo
 	
-	\item Il nuovo codice in Python fa uso della libreria \textit{scikit-sparse} per calcolare la fattorizzazione di Cholesky della matrice $A$ presa in input; nel caso $A$ sia simmetrica e definita positiva, calcoliamo la soluzione grazie alla fattorizzazione $A = RR^T$, altrimenti viene lanciata e gestita un'eccezione, quindi calcoliamo la soluzione come nell'algoritmo precedente, utilizzando la fattorizzazione LU.
+	\item Il nuovo codice in Python fa uso della libreria \textit{scikit-sparse} per calcolare la fattorizzazione di Cholesky della matrice $A$ presa in input; nel caso $A$ sia simmetrica e definita positiva, calcoliamo la soluzione grazie alla fattorizzazione $A = RR^T$, altrimenti viene lanciata e gestita un'eccezione, quindi calcoliamo la soluzione come nell'algoritmo precedente, utilizzando la fattorizzazione LU
 \end{itemize}
 
 
@@ -365,11 +373,6 @@ Durante l'esecuzione di ogni script si suppone di non essere a conoscenza di que
 	\end{figure}
 \end{frame}
 
-\begin{frame}
-\frametitle{Grafici performance}
-Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocità, precisione e occupazione di memoria.
-\end{frame}
-
 
 \begin{frame}
 	\frametitle{Tempo di esecuzione}
@@ -390,7 +393,7 @@ Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocit
 \end{frame}
 
 \begin{frame}
-	\frametitle{Tempo di esecuzione}
+	\frametitle{Errore relativo soluzione}
 	\begin{figure}
 		\includegraphics[width=1.35\textheight]{assets/error.jpg}
 		\caption{Confronto errore relativo soluzione.}
@@ -430,8 +433,8 @@ Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocit
 \begin{enumerate}
 \item La FFT \'e un modo per calcolare la trasformata discreta di Fourier in modo efficiente, facendo uso di simmetrie; a differenza della DCT, la DFT usa anche numeri complessi. \'E definita cos\'i:
 \[c_k = \sum\limits_{j = 1}^N v_j e^{-2 \pi i \frac{kj}{N}} \;\;\;\; k = 0,...,N-1\]
-\item Utilizziamo \textit{numpy.fft}, la cui implementazione sottostante \'e scritta in linguaccio C.
-\item Costo computazionale: $O(n^2log(n))$
+\item Utilizziamo \textit{numpy.fft}, la cui implementazione sottostante \'e scritta in linguaccio C
+\item Costo computazionale: $O(N^2log(N))$
 \end{enumerate}
 \end{frame}
 \begin{frame}
@@ -440,7 +443,7 @@ Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocit
 \item Implementata da noi in Python, applicando la DCT scalata alla matrice prima per righe e poi per colonne:
 \[c_k = \frac{1}{\sqrt{\alpha_k}} \sum\limits_{j=1}^N \cos(\pi k \frac{2j - 1}{2N}) v_j \;\;\;\; k = 0,...,N-1\]
 \item Non viene utilizzato un linguaggio a basso livello, risulta essere più lenta ma emerge comunque il comportamento asintotico
-\item Costo computazionale: $O(n^3)$
+\item Costo computazionale: $O(N^3)$
 \end{enumerate}
 \end{frame}
 
@@ -461,7 +464,7 @@ Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocit
 
 \begin{frame}
 	\frametitle{Confronto tra Custom DCT2 e FFT}
-	Per il calcolo della FFT utilizziamo la funzione \textit{numpy.fft.fft}. Le matrici vengono create di dimensione $2^i$ con $1\leq i \leq 14$ e gestite con \textit{numpy}. Questo è utile per motivi di visualizzazione del tempo di esecuzione, infatti i costi computazionali sono $O(n^3)$ per la Custom DCT e $O(n^2log(n))$ per la FFT.\\
+	Per il calcolo della FFT utilizziamo la funzione \textit{numpy.fft.fft}. Le matrici vengono create di dimensione $2^i$ con $3\leq i \leq 14$ e gestite con \textit{numpy}. Questo è utile per motivi di visualizzazione del tempo di esecuzione, infatti i costi computazionali sono $O(n^3)$ per la Custom DCT e $O(n^2log(n))$ per la FFT.\\
 	Plottando il tempo di esecuzione in secondi al variare della dimensione delle matrici $n = 2^i$ con $i$ crescente, e riportando le ascisse su scala logaritmica si ottiene:\\
 	\begin{itemize}
 		\item DCT: $O(n^3) \Rightarrow log_2((2^i)^3) =  log_2(2^{3i}) = 3i $
@@ -503,7 +506,7 @@ Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocit
 
 		\begin{itemize}
 			\item \textbf{Da cui}: FFT impiega il $74\%$ del tempo impegato alla DCT
-			\item L'intercetta della FFT di numpy è minore rispetto alla custom DCT in quanto viene utilizzato un linguaggio a basso livello (il costo computazionale non cambia).
+			\item L'intercetta della FFT di \textit{numpy} è minore rispetto alla custom DCT in quanto viene utilizzato un linguaggio a basso livello (il costo computazionale non cambia)
 		\item (*) Vengono esclusi i tempi di calcolo per matrici troppo piccole, così da far emergere il comportamento asintotico dell'algoritmo e quindi il costo computazionale
 		\end{itemize}
 	\end{itemize}
@@ -516,9 +519,9 @@ Confronto tra Matlab,  Octave, Python su Windows o Linux per i parametri velocit
 		\begin{itemize}
 			\item Custom DCT: $3i$ (vs. $2.959$)
 			\item Numpy FFT: $2i$ (vs. $2.209$)
-			\item \textbf{Da cui}: FFT impiega il $66\%$ (vs. $74\%$) del tempo impegato dalla DCT.
+			\item \textbf{Da cui}: FFT impiega il $66\%$ (vs. $74\%$) del tempo impegato dalla DCT
 		\end{itemize}
-		\item I risultati teorici e sperimentali sono coerenti tra loro, tuttavia non considerando il contributo del logaritmo nella FFT le proporzioni vengono leggermente distorte.
+		\item I risultati teorici e sperimentali sono coerenti tra loro, tuttavia non considerando il contributo del logaritmo nella FFT le proporzioni vengono leggermente distorte
 	\end{itemize}
 \end{frame}
 
@@ -531,9 +534,9 @@ INPUT: immagine, \textbf{f} dimensione dei blocchetti, \textbf{d} soglia di tagl
 \begin{enumerate}
 \item Inizializza una matrice con i valori dell'immagine bitmap e una matrice di zeri
 \item Calcola il numero di blocchetti per righe e per colonne data la dimensione dei blocchetti \textbf{f}
-\item Ad ogni blocchetto applica la DCT2 (della libreria \textit{scipy.fft})
+\item Ad ogni blocchetto applica la DCT2 (della libreria \textit{numpy.fft})
 \item Per ogni blocchetto taglia le frequenze alte data la soglia \textbf{d}
-\item Ad ogni blocchetto applica la IDCT2 (della libreria \textit{scipy.fft})
+\item Ad ogni blocchetto applica la IDCT2 (della libreria \textit{numpy.fft})
 \item Arrotonda i numeri e li mappa nell'intervallo $[0, 255]$
 \end{enumerate}
 
