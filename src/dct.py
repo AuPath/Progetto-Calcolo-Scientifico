@@ -62,7 +62,7 @@ class Worker(QObject):
                 ## a[0:8,0:3] 8 righe 3 colonne
 
                 block = img_mat[i * f: (i + 1) * f, j * f: (j + 1) * f]
-                block = fft(fft(block, axis=1, norm="ortho"), axis=0, norm="ortho")
+                block = fft(fft(block, axis=1, norm="ortho"), axis=0, norm="ortho").real
 
                 ## eliminazione elementi sotto diagonale
 
@@ -72,7 +72,7 @@ class Worker(QObject):
                         if (k + l) >= d:
                             block[k, l] = 0  ## per eliminare la frequenza intende mettere a 0 ?
 
-                block = ifft(ifft(block, axis=1, norm="ortho"), axis=0, norm="ortho")
+                block = ifft(ifft(block, axis=1, norm="ortho"), axis=0, norm="ortho").real
 
                 ## fix dei numeri
                 for k in range(block.shape[0]):
