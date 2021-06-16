@@ -84,7 +84,7 @@ class ScriptThread(Thread):
             subprocess.call(['taskkill', '/F', '/T', '/PID', str(self.process.pid)],
                             stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         else:
-            # Windows
+            # Linux
             subprocess.call(['kill', '-9', str(self.process.pid)],
                             stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         self.process.kill()
