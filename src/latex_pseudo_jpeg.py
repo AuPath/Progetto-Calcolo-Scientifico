@@ -5,14 +5,14 @@ from numpy.fft import fft
 from numpy.fft import ifft
 
 ## fissa un range di valori possibili per n
-def clamp(self, n, smallest, largest):
+def clamp(n, smallest, largest):
     return max(smallest, min(n, largest))
 
 ## forza n ad un valore intero tra 0 e 255
-def fix_number(self, n):
-    return self.clamp(round(n), 0, 255)
+def fix_number(n):
+    return clamp(round(n), 0, 255)
 
-def pseudo_jpeg(self, img_path, f, d):
+def pseudo_jpeg(img_path, f, d):
     img = Image.open(img_path)
     img_mat = np.array(img)
     c_mat = np.zeros_like(img_mat)
@@ -42,7 +42,7 @@ def pseudo_jpeg(self, img_path, f, d):
             ## fix dei numeri
             for k in range(block.shape[0]):
                 for l in range(block.shape[1]):
-                    block[k, l] = self.fix_number(block[k, l])
+                    block[k, l] = fix_number(block[k, l])
 
             c_mat[i * f: (i + 1) * f, j * f: (j + 1) * f] = block
     
