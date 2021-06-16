@@ -83,7 +83,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
-\usepackage{array} 
+\usepackage{array}
 \usepackage{hyperref}
 
 \definecolor{commentsColor}{rgb}{0.497495, 0.497587, 0.497464}
@@ -167,7 +167,7 @@ University of Milano Bicocca \\ % Your institution for the title page
 \subsection{Approccio al problema}
 
 \begin{frame}
-	
+
 	\frametitle{Sistema operativo e hardware }
 	Sistema operativo (installazione da zero)
 	\begin{itemize}
@@ -184,7 +184,7 @@ University of Milano Bicocca \\ % Your institution for the title page
 
 
 \begin{frame}
-	
+
 	\frametitle{Ambienti di programmazione e librerie utilizzate}
 	Abbiamo utilizzato 3 ambienti di programmazione; per Python abbiamo usato 3 librerie, di cui una necessaria per ottimizzare il calcolo su matrici molto grandi.
 	\begin{itemize}
@@ -213,7 +213,7 @@ University of Milano Bicocca \\ % Your institution for the title page
 	\end{frame}
 
 \begin{frame}
-	
+
 	\frametitle{Tecniche di misurazione}
 		\begin{enumerate}
 		\item Creazione dei 4 script per il calcolo della soluzione di una matrice
@@ -223,60 +223,60 @@ University of Milano Bicocca \\ % Your institution for the title page
 		\end{itemize}
 
 		\item 10 iterazioni per il calcolo delle misure (in modo tale da avere risultati statisticamente validi)
-	
+
 		\begin{itemize}
 			\item Script Python con funzione di \textit{wrapper} per profilare la memoria utilizzata
 			\begin{enumerate}
 				\item Run di ogni script per ogni matrice su ogni sistema operativo
 
 					\item Misurazione del tempo (si considera solo il tempo per il calcolo della soluzione)
-					\item Misurazione dell'errore 
+					\item Misurazione dell'errore
 
 			\end{enumerate}
-			
+
 		\end{itemize}
 
 
-		\item Analisi dei report generati				
+		\item Analisi dei report generati
 
 	\end{enumerate}
 \end{frame}
 
 
 \begin{frame}
-	
+
 	\frametitle{Tecniche di misurazione}
-	
+
 	\includegraphics[height=0.6\textwidth]{assets/execution_workflow.png}
-	
+
 \end{frame}
 
 \subsection{Analisi delle librerie}
 
-\begin{frame}	
+\begin{frame}
 	\frametitle{Matlab}
 	Matlab \'e ben documentato\footnote{\url{it.mathworks.com/help/matlab}}, con motore di ricerca ed esempi.\\
-		\textbf{Memorizzazione di matrici sparse}: data una matrice sparsa, Matlab salva solo gli elementi diversi da 0 in una lista, insieme al numero di colonna e riga. 
+		\textbf{Memorizzazione di matrici sparse}: data una matrice sparsa, Matlab salva solo gli elementi diversi da 0 in una lista, insieme al numero di colonna e riga.
 	\end{frame}
 
 
 \begin{frame}
 \frametitle{Matlab}
-\textbf{Risoluzione di $Ax = b$}: 
+\textbf{Risoluzione di $Ax = b$}:
 
 \begin{itemize}
 	\item Matlab utilizza risolutori diversi
 	\item Casi considerati: quadrata, triangolare, triangolare permutata, hermitiana, Hessenberg superiore, la diagonale tutta positiva o tutta negativa, simmetrica e definita positiva
-	\item Il risolutore addotato dipende dalla forma di $A$ (ad esempio utilizza Cholesky per matrici simmetriche e definite positive)
+	\item Il risolutore adottato dipende dalla forma di $A$ (ad esempio utilizza Cholesky per matrici simmetriche e definite positive)
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Octave}
 Octave \'e documentato\footnote{\url{https://octave.org/doc/v6.2.0}} in modo scomodo rispetto a Matlab, con un semplice manuale. \\
-\textbf{Memorizzazione di matrici sparse}: usa il \textit{compressed column format}, ovvero 
+\textbf{Memorizzazione di matrici sparse}: usa il \textit{compressed column format}, ovvero
 salva solo gli elementi diversi da 0 con il proprio numero di riga, e per ogni colonna salva il numero di elementi diversi da 0 per quella colonna; pertanto al posto di una tripletta per ogni elemento diverso da 0, si salva una coppia e in pi\'u un numero per ogni colonna, ottimizzando la memorizzazione.
-\end{frame} 
+\end{frame}
 \begin{frame}
 \frametitle{Octave}
 \textbf{Risoluzione di $Ax = b$}:
@@ -285,7 +285,7 @@ salva solo gli elementi diversi da 0 con il proprio numero di riga, e per ogni c
 	\item Comportamento analogo a Matlab
 	\item Viene considerata la forma della matrice $A$ per scegliere il risolutore adatto
 	\item  Anche Octave, come Matlab, prova ad applicare Cholesky e se non riesce significa che la matrice non \'e definita positiva e/o simmetrica
-	
+
 \end{itemize}
 \end{frame}
 
@@ -293,7 +293,7 @@ salva solo gli elementi diversi da 0 con il proprio numero di riga, e per ogni c
 \frametitle{Python (\textit{numpy} + \textit{scipy} + \textit{scikit-sparse})}
 Python è un linguaggio di programmazione general purpose. Abbiamo utilizzato 3 librerie apposite per il calcolo scientifico, tutte implementate in C e ognuna con un compito diverso.
 \begin{enumerate}
-\item \textit{numpy}: libreria utilizzata per leggere e gestire le matrice in memoria e per il calcolo scientifico
+\item \textit{numpy}: libreria utilizzata per leggere e gestire le matrici in memoria e per il calcolo scientifico
 \item \textit{scipy}: libreria specifica per il calcolo scientifico. Utilizza metodi diretti per il calcolo della soluzione di un sistema.\\
 Il metodo standard per la risoluzione diretta di sistemi lineari non \'e ottimizzato come in Matlab o Octave, ovvero non divide i risolutori in base alla matrice. Supporta la fattorizzazione LU che \'e abilitata di default; non supporta Cholesky su matrici sparse
 \item \textit{scikit-sparse}: libreria che permette di applicare Cholesky su matrici sparse
@@ -311,7 +311,7 @@ Il metodo standard per la risoluzione diretta di sistemi lineari non \'e ottimiz
 	\begin{itemize}
 		\item \textit{scipy} si appoggia completamente sul pacchetto opensoruce \textit{UMFPACK}, un insieme di routines scritte in C per risolvere sistemi lineari sparsi
 
-		\item La documentazione\footnote{\url{https://fossies.org/linux/SuiteSparse/UMFPACK/Doc/UMFPACK_UserGuide.pdf}} di \textit{UMFPACK} è completa, riporta il codice C con relativa spiegazione delle varie routines. Qui viene chiaramente spiegato il processo di risoluzione per sistemi lineari sparsi
+		\item La documentazione\footnote{\url{fossies.org/linux/SuiteSparse/UMFPACK/Doc/UMFPACK_UserGuide.pdf}} di \textit{UMFPACK} è completa, riporta il codice C con relativa spiegazione delle varie routines. Nella documentazione viene chiaramente spiegato il processo di risoluzione per sistemi lineari sparsi
 
 	\end{itemize}
 \end{frame}
@@ -331,9 +331,9 @@ Il metodo standard per la risoluzione diretta di sistemi lineari non \'e ottimiz
 
 \begin{itemize}
 	\item Poich\'e \textit{scipy} utilizza sempre e solo la fattorizzazione LU per risolvere i sitemi lineari, abbiamo voluto introdurre un workflow simile a Matlab sfruttando la fattorizzazione con Cholesky
-	
+
 	\item \textit{scipy} non permette di utilizzare Cholesky su matrici sparse, quindi abbiamo introdotto la libreria \textit{scikit-sparse} proprio a questo scopo
-	
+
 	\item Il nuovo codice in Python fa uso della libreria \textit{scikit-sparse} per calcolare la fattorizzazione di Cholesky della matrice $A$ presa in input; nel caso $A$ sia simmetrica e definita positiva, calcoliamo la soluzione grazie alla fattorizzazione $A = RR^T$, altrimenti viene lanciata e gestita un'eccezione, quindi calcoliamo la soluzione come nell'algoritmo precedente, utilizzando la fattorizzazione LU
 \end{itemize}
 
@@ -493,7 +493,7 @@ Durante l'esecuzione di ogni script si suppone di non essere a conoscenza di que
 
 			\begin{tabular}{cc|cc}
 				\firsthline
-				\multicolumn{2}{c}{\textbf{Custom DCT}} & \multicolumn{2}{c}{\textbf{Numpy FFT}*} \\	
+				\multicolumn{2}{c}{\textbf{Custom DCT}} & \multicolumn{2}{c}{\textbf{Numpy FFT}*} \\
 				\hline
 				\hline
 				$m$    & $q$ & $m$ & $q$  \\
@@ -501,7 +501,7 @@ Durante l'esecuzione di ogni script si suppone di non essere a conoscenza di que
 				$2.959$ & $-19.587$ & $2.209$&  $-26.693$\\
 				\lasthline
 			\end{tabular}
-	
+
 		\end{center}
 
 		\begin{itemize}
@@ -589,15 +589,15 @@ OUTPUT: immagine compressa
 		\caption{f = 99, d = 1}
 	\end{figure}
 
-\end{frame}	
+\end{frame}
 
 \begin{frame}
 	\frametitle{Esempi con le immagini proposte}
 	\begin{figure}
 		\fbox{\includegraphics[width=.4\linewidth]{../images/jump1-compressed-99-20.png}}
-		\caption{f = 99, d = 20}		
+		\caption{f = 99, d = 20}
 	\end{figure}
-	
+
 \end{frame}
 
 \begin{frame}
@@ -606,7 +606,7 @@ OUTPUT: immagine compressa
 		\fbox{\includegraphics[width=.4\linewidth]{../images/jump1-compressed-99-196.png}}
 		\caption{f = 99, d = 196}
 	\end{figure}
-	
+
 \end{frame}
 
 \begin{frame}
@@ -614,7 +614,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		{\includegraphics[width=.4\linewidth]{../images/circle.png}}
 		\caption{Originale 1100x1100}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -622,7 +622,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		{\includegraphics[width=.4\linewidth]{../images/circle-compressed-100-10.png}}
 		\caption{f = 100, d = 10}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -630,7 +630,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		{\includegraphics[width=.4\linewidth]{../images/circle-compressed-100-50.png}}
 		\caption{f = 100, d = 50}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -638,7 +638,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		\fbox{\includegraphics[width=.4\linewidth]{../images/jump2.png}}
 		\caption{Originale 400x400}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -646,7 +646,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		\fbox{\includegraphics[width=.4\linewidth]{../images/jump2-compressed-100-20.png}}
 		\caption{f = 100, d = 20}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -654,7 +654,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		\fbox{\includegraphics[width=.4\linewidth]{../images/jump2-compressed-100-50.png}}
 		\caption{f = 100, d = 50}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -662,7 +662,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		{\includegraphics[width=.8\linewidth]{../images/deer.png}}
 		\caption{Originale 4043x2641}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -670,7 +670,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		{\includegraphics[width=.8\linewidth]{../images/deer-compressed-120-10.png}}
 		\caption{f = 120, d = 10}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -678,7 +678,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		{\includegraphics[width=.8\linewidth]{../images/deer-compressed-120-30.png}}
 		\caption{f = 120, d = 30}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -686,7 +686,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		{\includegraphics[width=.8\linewidth]{../images/big_building.png}}
 		\caption{Originale 7216x5412}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -694,7 +694,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		{\includegraphics[width=.8\linewidth]{../images/big_building-compressed-340-20.png}}
 		\caption{f = 340, d = 20}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -702,7 +702,7 @@ OUTPUT: immagine compressa
 	\begin{figure}
 		{\includegraphics[width=.8\linewidth]{../images/big_building-compressed-340-400.png}}
 		\caption{f = 340, d = 400}
-	\end{figure}	
+	\end{figure}
 \end{frame}
 
 \subsection{Live demo}
